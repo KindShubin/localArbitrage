@@ -39,8 +39,7 @@ public class HitBtc {
         }
         System.out.printf("\n\n\n\n");
         writeJsonToDB(tickers);
-
-
+        System.exit(0);
     }
 
     public static TickerSymbol[] jsonTickerToArrayTickers(String json) {
@@ -80,6 +79,7 @@ public class HitBtc {
             else{
                 System.out.println(ts.symbol+" update DONE");
             }
+            System.out.println("writeJsonToDB done");
         }
     }
 
