@@ -62,15 +62,18 @@ public class HitBtc {
             int i = 0;
             try{
                 i = DBconnactionVPS.executeQueryInt(update);
+                System.out.println("output UPDATE:"+i);
             } catch (SQLException e) {
+                System.out.println("update ERROR:");
                 e.printStackTrace();
             }
-            if (i>0){
+            if (i==0){
                 System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
                 try {
                     DBconnactionVPS.executeQuery(insert);
                     System.out.println(ts.symbol+" insert DONE");
                 } catch (SQLException e) {
+                    System.out.println("Insert ERROR:");
                     e.printStackTrace();
                 }
             }
