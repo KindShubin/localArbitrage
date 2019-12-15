@@ -105,7 +105,13 @@ public class HitBtc {
         }
         System.out.println("dbResult:"+dbResult);
         for (HashMap hm : dbResult){
-            result.add(GetVal.getInt(hm,"baseCoin"));
+            try{
+                result.add(GetVal.getInt(hm,"baseCoin"));
+            } catch (Exception e){
+                System.out.println("ERROR add int ti array:");
+                System.out.println(e.toString());
+            }
+
         }
         return result;
     }
