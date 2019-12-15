@@ -92,7 +92,8 @@ public class GetVal {
     public static Character getChar(HashMap hm, String name){
         //System.out.println("getChar start");
         char val;
-        try{ val = (char) hm.get(name); }
+        //try{ val = (char) hm.get(name); }
+        try{ val = Character.valueOf(hm.get(name).toString().charAt(0)); }
         catch (Exception e){
             System.out.println(e);
             try{ val = Character.valueOf((Character) hm.get(name)); }
