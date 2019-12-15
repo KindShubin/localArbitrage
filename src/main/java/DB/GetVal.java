@@ -33,7 +33,8 @@ public class GetVal {
     public static Long getLong(HashMap hm, String name){
         //System.out.println("getLong start");
         long val;
-        try{ val = (long) hm.get(name); }
+        //try{ val = (long) hm.get(name); }
+        try{ val = Long.valueOf(hm.get(name).toString()); }
         catch (Exception e){
 //            System.out.println(e);
             try{
@@ -53,7 +54,8 @@ public class GetVal {
     public static Double getDouble(HashMap hm, String name){
         //System.out.println("getLong start");
         double val;
-        try{ val = (double) hm.get(name); }
+        //try{ val = (double) hm.get(name); }
+        try{ val = Double.valueOf(hm.get(name).toString()); }
         catch (Exception e){
 //            System.out.println(e);
             try{
@@ -73,7 +75,8 @@ public class GetVal {
     public static String getStr(HashMap hm, String name){
         //System.out.println("getStr start");
         String val;
-        try{ val = (String) hm.get(name); }
+        //try{ val = (String) hm.get(name); }
+        try{ val = hm.get(name).toString(); }
         catch (Exception e){
 //            System.out.println(e);
             try{ val = String.valueOf(hm.get(name)); }
@@ -124,7 +127,8 @@ public class GetVal {
     public static Boolean getBool(HashMap hm, String name){
         //System.out.println("getBool start");
         boolean val;
-        try{ val = (Boolean) hm.get(name); }
+        //try{ val = (Boolean) hm.get(name); }
+        try{ val = Boolean.valueOf(hm.get(name).toString()); }
         catch (Exception e){
 //            System.out.println(e);
             try {
