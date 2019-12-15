@@ -96,7 +96,7 @@ public class HitBtc {
     public static ArrayList<Integer> getBaseAltCoins(){
         //1,6,59,255,257,267,306,315 - id монет к которым торгуется пары(BTC, ETH, USD...)
         String select = "SELECT baseCoin FROM exchange.pairs where baseCoin not in (1,6,59,255,257,267,306,315) group by baseCoin;";
-        ArrayList<Integer> result = null;
+        ArrayList<Integer> result = new ArrayList<>();
         ArrayList<HashMap> dbResult = null;
         try {
             dbResult = DBconnactionVPS.getResultSet(select);
