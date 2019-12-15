@@ -1,5 +1,6 @@
 package hitbtc;
 
+import DB.GetVal;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -8,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import DB.DBconnactionVPS;
 
@@ -39,7 +42,14 @@ public class HitBtc {
         }
         System.out.printf("\n\n\n\n");
         writeJsonToDB(tickers);
+        ArrayList<Integer> uniqPairs=getBaseAltCoins();
+        for(int i : uniqPairs){
+            System.out.printf("Pair %s\n" , i);
+        }
+
+
         System.exit(0);
+
     }
 
     public static TickerSymbol[] jsonTickerToArrayTickers(String json) {
@@ -81,6 +91,22 @@ public class HitBtc {
             }
             System.out.println("writeJsonToDB done");
         }
+    }
+
+    public static ArrayList<Integer> getBaseAltCoins(){
+        //1,6,59,255,257,267,306,315 - id монет к которым торгуется пары(BTC, ETH, USD...)
+        String select = "SELECT baseCoin FROM exchange.pairs where baseCoin not in (1,6,59,255,257,267,306,315) group by baseCoin";
+        ArrayList<Integer> result = null;
+        ArrayList<HashMap> dbResult = null;
+        try {
+            dbResult = DBconnactionVPS.getResultSet(select);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (HashMap hm : dbResult){
+            result.add(GetVal.getInt(hm,"baseCoin"));
+        }
+        return result;
     }
 
 }
