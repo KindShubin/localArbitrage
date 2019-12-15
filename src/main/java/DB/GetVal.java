@@ -2,13 +2,14 @@ package DB;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.*;
 
 public class GetVal {
 
     public static Integer getInt(HashMap hm, String name){
         //System.out.println("getInt begin");
         int val;
-        try{ val = (int) hm.get(name); }
+        try{ val = Integer.valueOf(hm.get(name).toString()); }
         catch (Exception e){
 //            System.out.println(e);
 //            e.printStackTrace();
