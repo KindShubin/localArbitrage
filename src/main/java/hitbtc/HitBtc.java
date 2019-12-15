@@ -41,10 +41,11 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        writeJsonToDB(tickers);
+        //writeJsonToDB(tickers);
         ArrayList<Integer> uniqPairs=getBaseAltCoins();
         for(int i : uniqPairs){
-            System.out.printf("Pair %s\n" , i);
+            ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
+            System.out.printf("Pair %s: %s\n" , i, quotsCoin.toString());
         }
 
 
@@ -112,6 +113,22 @@ public class HitBtc {
                 System.out.println(e.toString());
             }
 
+        }
+        return result;
+    }
+
+    public static ArrayList<Integer> getQuoteCoinsForBaseCoin(int id){
+        String select = "select ep.quoteCoin FROM exchange.hitbtc as eh join exchange.pairs as ep on eh.pair=ep.id where ep.baseCoin="+id;
+        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<HashMap> dbRes = null;
+        try {
+            dbRes = DBconnactionVPS.getResultSet(select);
+        } catch (SQLException e) {
+            System.out.println("|getQuoteCoinsForBaseCoin| Error select:");
+            e.printStackTrace();
+        }
+        for (HashMap hm : dbRes){
+            result.add(GetVal.getInt(hm,"quoteCoin"));
         }
         return result;
     }
