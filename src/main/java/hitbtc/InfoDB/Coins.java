@@ -10,12 +10,8 @@ import java.util.Map;
 
 public class Coins {
     // integer - id из Coin
+    public static final String SELECT = "SELECT id, abbreviation, name, description FROM exchange.coins order by id;";
     public Map<Integer, Coin> coins;
-
-    public Coins(){
-        String select = "SELECT id, abbreviation, name, description FROM exchange.coins order by id;";
-        new Coins(select);
-    }
 
     public Coins(String select){
         Map<Integer, Coin> coins = new HashMap<>();
@@ -35,8 +31,12 @@ public class Coins {
         this.coins=coins;
     }
 
+    public Coins(){
+        this(SELECT);
+    }
+
     public void print(){
-        for(Map.Entry<Integer, Coin> entry : coins.entrySet()){
+        for(Map.Entry<Integer, Coin> entry : this.coins.entrySet()){
             String res = new StringBuilder().append("id_coin:").append(entry.getKey()).append("\tCoin:").append(entry.getValue().toString()).toString();
             System.out.println(res);
         }
