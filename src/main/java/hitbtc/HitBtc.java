@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import DB.DBconnactionVPS;
+import hitbtc.InfoDB.Coins;
 
 public class HitBtc {
 
@@ -45,7 +46,7 @@ public class HitBtc {
         ArrayList<Integer> uniqPairs=getBaseAltCoins();
         for(int i : uniqPairs){
             ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
-            System.out.printf("Pair %s: %s\n" , i, quotsCoin.toString());
+            System.out.printf("Base coin %s: %s\n" , i, quotsCoin.toString());
         }
 
 
@@ -91,6 +92,8 @@ public class HitBtc {
                 System.out.println(ts.symbol+" update DONE");
             }
             System.out.println("writeJsonToDB done");
+            Coins coins = new Coins();
+            coins.print();
         }
     }
 
@@ -117,6 +120,7 @@ public class HitBtc {
         return result;
     }
 
+    //получить все инстурменты к которым торгуется данныя монета
     public static ArrayList<Integer> getQuoteCoinsForBaseCoin(int id){
         String select = "select ep.quoteCoin FROM exchange.hitbtc as eh join exchange.pairs as ep on eh.pair=ep.id where ep.baseCoin="+id;
         ArrayList<Integer> result = new ArrayList<>();
@@ -132,5 +136,7 @@ public class HitBtc {
         }
         return result;
     }
+
+
 
 }
