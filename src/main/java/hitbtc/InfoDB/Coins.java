@@ -32,6 +32,7 @@ public class Coins {
             String description = GetVal.getStr(hm, "description");
             coins.put(id,new Coin(id,abbreviation,name,description));
         }
+        this.coins=coins;
     }
 
     public void print(){

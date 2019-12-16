@@ -48,7 +48,7 @@ public class HitBtc {
             ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
             System.out.printf("Base coin %s: %s\n" , i, quotsCoin.toString());
         }
-        
+
         Coins coins = new Coins();
         coins.print();
 
