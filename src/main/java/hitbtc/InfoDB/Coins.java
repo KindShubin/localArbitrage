@@ -37,7 +37,7 @@ public class Coins {
 
     public void print(){
         for(Map.Entry<Integer, Coin> entry : this.coins.entrySet()){
-            String res = new StringBuilder().append("id_coin:").append(entry.getKey()).append("\tCoin:").append(entry.getValue().toString()).toString();
+            String res = new StringBuilder().append("id_coin:").append(entry.getKey()).append("\tCoin:\t").append(entry.getValue().toString()).toString();
             System.out.println(res);
         }
     }
@@ -58,7 +58,7 @@ class Coin {
 
     public String toString(){
         String result = new StringBuilder().append("id:").append(id).append("\tabbreviation:").append(abbreviation)
-                .append("\tname:").append(name).append("\tdescription").append(description).toString();
+                .append("\tname:").append(name).append("\tdescription:").append(description).toString();
         return result;
     }
 
