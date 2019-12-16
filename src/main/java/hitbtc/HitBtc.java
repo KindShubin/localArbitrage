@@ -48,7 +48,9 @@ public class HitBtc {
             ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
             System.out.printf("Base coin %s: %s\n" , i, quotsCoin.toString());
         }
-
+        
+        Coins coins = new Coins();
+        coins.print();
 
         System.exit(0);
 
@@ -92,8 +94,6 @@ public class HitBtc {
                 System.out.println(ts.symbol+" update DONE");
             }
             System.out.println("writeJsonToDB done");
-            Coins coins = new Coins();
-            coins.print();
         }
     }
 
