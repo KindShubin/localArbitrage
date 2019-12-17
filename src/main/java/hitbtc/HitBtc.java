@@ -175,11 +175,17 @@ public class HitBtc {
     public static int getPairDB(int coin1, int coin2){
         String select = new StringBuilder("SELECT id FROM exchange.pairs where (baseCoin=").append(coin1).append(" or baseCoin=").append(coin2)
         .append(") and (quoteCoin=").append(coin1).append(" or quoteCoin=").append(coin2).append(");").toString();
-        int result = 0;
+        int result;
         try {
             ArrayList<HashMap> resDB = DBconnactionVPS.getResultSet(select);
             result=GetVal.getInt(resDB.get(0),"id");
         } catch (SQLException e) {
+            result=0;
+            System.out.println("ERROR sql getPairDB()");
+            System.out.println(e.toString());
+            e.printStackTrace();
+        } catch (Exception e) {
+            result=0;
             System.out.println("ERROR getPairDB()");
             System.out.println(e.toString());
             e.printStackTrace();
