@@ -15,6 +15,7 @@ public class Hitbtc {
     public Map<Integer,HitbtcPair> hitbtc;
 
     public Hitbtc(String select){
+        this.hitbtc= new HashMap<>();
         ArrayList<HashMap> resDB = null;
         try {
             resDB= DBconnactionVPS.getResultSet(select);
@@ -36,14 +37,7 @@ public class Hitbtc {
             double ask5 = GetVal.getDouble(hm,"ask5");
             Timestamp date = GetVal.getTimeS(hm,"date");
             String description = GetVal.getStr(hm,"description");
-            HitbtcPair hbp = null;
-            try {
-                hbp = new HitbtcPair(id, pair, bid1, ask1, bid2, ask2, bid3, ask3, bid4, ask4, bid5, ask5, date, description);
-            } catch (Exception e){
-                e.printStackTrace();
-                System.out.println(e.toString());
-                System.out.println(e);
-            }
+            HitbtcPair hbp =  new HitbtcPair(id, pair, bid1, ask1, bid2, ask2, bid3, ask3, bid4, ask4, bid5, ask5, date, description);
             this.hitbtc.put(id, hbp);
         }
     }
