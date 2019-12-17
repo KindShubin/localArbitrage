@@ -62,8 +62,8 @@ public class HitBtc {
                     int quoteCoinFirstTransaction = quotsCoin.get(j);
                     for (int k=j+1; k<quotsCoin.size(); k++){
                         int quoteCoinSecondTransaction = quotsCoin.get(k);
-                        int idPairDB = getPairDB(j, k);
-                        int idPair = pairs.getPair(j, k);
+                        int idPairDB = getPairDB(quotsCoin.get(j), quotsCoin.get(k));
+                        int idPair = pairs.getPair(quotsCoin.get(j), quotsCoin.get(k));
                         System.out.printf("(%s=%s %s %s) ", idPairDB, idPair, quoteCoinFirstTransaction, quoteCoinSecondTransaction);
                     }
                 }
