@@ -41,6 +41,10 @@ public class Coins {
             System.out.println(res);
         }
     }
+
+    public String getAbbr(int id){
+        return this.coins.get(id).abbreviation;
+    }
 }
 
 class Coin {

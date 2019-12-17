@@ -19,6 +19,8 @@ import hitbtc.InfoDB.Pairs;
 
 public class HitBtc {
 
+    public static final double FEE = 0.0007;
+
     public static void main(String[] args) throws IOException {
 
         String url = "https://api.hitbtc.com/api/2/public/ticker";
@@ -44,27 +46,31 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        writeJsonToDB(tickers);
+        //writeJsonToDB(tickers);
         Coins coins = new Coins();
         Pairs pairs = new Pairs();
         Hitbtc hitbtcdb = new Hitbtc();
         ArrayList<Integer> baseAltCoins=getBaseAltCoins();
-        for(int i : baseAltCoins){
-            ArrayList<Integer> quotsCoinDB = getQuoteCoinsForBaseCoinDB(i);
-            ArrayList<Integer> quotsCoin = pairs.getArrQuoteCoinsForBaseCoin(i);
-            System.out.printf("|Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoin.toString());
-            System.out.printf("||Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoinDB.toString());
+        for(int baseAltCoin : baseAltCoins){
+            //ArrayList<Integer> quotsCoinDB = getQuoteCoinsForBaseCoinDB(i);
+            ArrayList<Integer> quotsCoin = pairs.getArrQuoteCoinsForBaseCoin(baseAltCoin);
+            System.out.printf("|Base coin:%s\tQuoteCoins:%s\n" , baseAltCoin, quotsCoin.toString());
             if(quotsCoin.size()>1){
                 // массив исключающий пары в далнейшем
                 ArrayList<Integer> arrDisableQuoteCoin = new ArrayList<>();
                 for (int j=0; j<quotsCoin.size(); j++){
                     arrDisableQuoteCoin.add(quotsCoin.get(j));
-                    int quoteCoinFirstTransaction = quotsCoin.get(j);
+                    int quoteCoin1thTransaction = quotsCoin.get(j);//базовый коин для первой транзакции
+                    int idPair1thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
                     for (int k=j+1; k<quotsCoin.size(); k++){
-                        int quoteCoinSecondTransaction = quotsCoin.get(k);
-                        int idPairDB = getPairDB(quotsCoin.get(j), quotsCoin.get(k));
-                        int idPair = pairs.getPair(quotsCoin.get(j), quotsCoin.get(k));
-                        System.out.printf("(%s=%s %s %s) ", idPairDB, idPair, quoteCoinFirstTransaction, quoteCoinSecondTransaction);
+                        int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
+                        int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для второй транзакции
+                        int idPair3thTransaction = pairs.getPair(quotsCoin.get(j), quotsCoin.get(k));//id пары базовых коинов для третей транзакции
+                        System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s\t2)%s:%s\t3)%s:%s\n",
+                                baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
+                                coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
+                                pairs.getExForm(idPair2thTransaction), idPair3thTransaction, pairs.getExForm(idPair3thTransaction));
+
                     }
                 }
                 System.out.println(" ");
