@@ -44,11 +44,16 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        //writeJsonToDB(tickers);
+        writeJsonToDB(tickers);
+        Coins coins = new Coins();
+        Pairs pairs = new Pairs();
+        Hitbtc hitbtcdb = new Hitbtc();
         ArrayList<Integer> baseAltCoins=getBaseAltCoins();
         for(int i : baseAltCoins){
-            ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
-            System.out.printf("Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoin.toString());
+            ArrayList<Integer> quotsCoinDB = getQuoteCoinsForBaseCoinDB(i);
+            ArrayList<Integer> quotsCoin = pairs.getArrQuoteCoinsForBaseCoin(i);
+            System.out.printf("|Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoin.toString());
+            System.out.printf("||Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoinDB.toString());
             if(quotsCoin.size()>1){
                 // массив исключающий пары в далнейшем
                 ArrayList<Integer> arrDisableQuoteCoin = new ArrayList<>();
@@ -57,18 +62,20 @@ public class HitBtc {
                     int quoteCoinFirstTransaction = quotsCoin.get(j);
                     for (int k=j+1; k<quotsCoin.size(); k++){
                         int quoteCoinSecondTransaction = quotsCoin.get(k);
-                        System.out.printf("(%s;%s) ", quoteCoinFirstTransaction, quoteCoinSecondTransaction);
+                        int idPairDB = getPairDB(j, k);
+                        int idPair = pairs.getPair(j, k);
+                        System.out.printf("(%s=$s %s %s) ", idPairDB, idPair, quoteCoinFirstTransaction, quoteCoinSecondTransaction);
                     }
                 }
                 System.out.println(" ");
             }
         }
 
-        Coins coins = new Coins();
+        //Coins coins = new Coins();
         //coins.print();
-        Pairs pairs = new Pairs();
+        //Pairs pairs = new Pairs();
         //pairs.print();
-        Hitbtc hitbtcdb = new Hitbtc();
+        //Hitbtc hitbtcdb = new Hitbtc();
         //hitbtcdb.print();
 
 
@@ -143,9 +150,11 @@ public class HitBtc {
         return result;
     }
 
-    //получить все инстурменты к которым торгуется данныя монета
-    public static ArrayList<Integer> getQuoteCoinsForBaseCoin(int id){
-        String select = "select ep.quoteCoin FROM exchange.hitbtc as eh join exchange.pairs as ep on eh.pair=ep.id where ep.baseCoin="+id;
+    //получить все инстурменты к которым торгуется данныя монета через Базу
+    //есть аналог метода в классе Pairs. getArrQuoteCoinsForBaseCoin
+    public static ArrayList<Integer> getQuoteCoinsForBaseCoinDB(int id){
+        //String select = "select ep.quoteCoin FROM exchange.hitbtc as eh join exchange.pairs as ep on eh.pair=ep.id where ep.baseCoin="+id;
+        String select = "select quoteCoin from exchange.pairs where baseCoin="+id;
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<HashMap> dbRes = null;
         try {
@@ -160,6 +169,19 @@ public class HitBtc {
         return result;
     }
 
-
+    //получить номер пары по двум номерам коинов. Ищет USDETH или ETHUSD...
+    // есть аналог в классе Pairs
+    public static int getPairDB(int coin1, int coin2){
+        String select = new StringBuilder("SELECT id FROM exchange.pairs where (baseCoin=").append(coin1).append(" or baseCoin=").append(coin2)
+        .append(") and (quoteCoin=").append(coin1).append(" or quoteCoin=").append(coin2).append(");").toString();
+        int result = 0;
+        try {
+            ArrayList<HashMap> resDB = DBconnactionVPS.getResultSet(select);
+            result=GetVal.getInt(resDB.get(0),"id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }

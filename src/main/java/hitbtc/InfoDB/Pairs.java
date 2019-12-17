@@ -42,6 +42,35 @@ public class Pairs {
         }
     }
 
+    public ArrayList<Integer> getArrQuoteCoinsForBaseCoin(int baseCoin){
+        ArrayList<Integer> arrRes = new ArrayList<>();
+        for(Map.Entry<Integer, Pair> mapP : this.pairs.entrySet()){
+            if (mapP.getValue().baseCoin==baseCoin){
+                arrRes.add(mapP.getValue().quoteCoin);
+            }
+        }
+        return arrRes;
+    }
+
+    public int getPair(int coin1, int coin2){
+        int res = 0;
+        for (Map.Entry<Integer,Pair> entry : this.pairs.entrySet()){
+            if (entry.getValue().baseCoin==coin1 & entry.getValue().quoteCoin==coin2){
+                res = entry.getKey();
+                break;
+            }
+            if (entry.getValue().baseCoin==coin2 & entry.getValue().quoteCoin==coin1){
+                res = entry.getKey();
+                break;
+            }
+        }
+        return res;
+    }
+
+    public String getExForm(int id){
+        return this.pairs.get(id).exForm;
+    }
+
 }
 
 class Pair{
