@@ -96,6 +96,7 @@ public class HitBtc {
     public static void writeJsonToDB(TickerSymbol[] tickers){
         System.out.println("writeJsonToDB ..............");
         for (TickerSymbol ts : tickers){
+            System.out.print(ts.symbol+" ");
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
                     .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now());").toString();
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1 = ").append(ts.ask)
@@ -105,23 +106,24 @@ public class HitBtc {
             int i = 0;
             try{
                 i = DBconnactionVPS.executeQueryInt(update);
-                System.out.println("output UPDATE:"+i);
+                System.out.print("output UPDATE:"+i+" ");
             } catch (SQLException e) {
-                System.out.println("update ERROR:");
-                e.printStackTrace();
-            }
-            if (i==0){
-                System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
-                try {
-                    DBconnactionVPS.executeQuery(insert);
-                    //System.out.println(ts.symbol+" insert DONE");
-                } catch (SQLException e) {
-                    //System.out.println("Insert ERROR:");
-                    e.printStackTrace();
+                System.out.println("update ERROR ");
+                //e.printStackTrace();
+                if (i!=0){
+                    System.out.println("ERROR wtf");
+                    System.out.println(e.toString());
                 }
             }
-            else{
-                //System.out.println(ts.symbol+" update DONE");
+            if (i==0){
+                //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
+                try {
+                    DBconnactionVPS.executeQuery(insert);
+                    System.out.print("Insert DONE");
+                } catch (SQLException e) {
+                    System.out.println("Insert ERROR:");
+                    e.printStackTrace();
+                }
             }
         }
         System.out.println("writeJsonToDB done");
@@ -173,7 +175,6 @@ public class HitBtc {
     //получить номер пары по двум номерам коинов. Ищет USDETH или ETHUSD...
     // есть аналог в классе Pairs
     public static int getPairDB(int coin1, int coin2){
-        System.out.printf("getPairDB() coin1=%s coin2=%s\n" , coin1, coin2);
         String select = new StringBuilder("SELECT id FROM exchange.pairs where (baseCoin=").append(coin1).append(" or baseCoin=").append(coin2)
         .append(") and (quoteCoin=").append(coin1).append(" or quoteCoin=").append(coin2).append(");").toString();
         int result;
@@ -182,14 +183,14 @@ public class HitBtc {
             result=GetVal.getInt(resDB.get(0),"id");
         } catch (SQLException e) {
             result=0;
-            System.out.println("ERROR sql getPairDB()");
-            System.out.println(e.toString());
-            e.printStackTrace();
+            //System.out.println("ERROR sql getPairDB()");
+            //System.out.println(e.toString());
+            //e.printStackTrace();
         } catch (Exception e) {
             result=0;
-            System.out.println("ERROR getPairDB()");
-            System.out.println(e.toString());
-            e.printStackTrace();
+            //System.out.println("ERROR getPairDB()");
+            //System.out.println(e.toString());
+            //e.printStackTrace();
         }
         return result;
     }
