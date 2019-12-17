@@ -68,7 +68,11 @@ public class Pairs {
     }
 
     public String getExForm(int id){
-        return this.pairs.get(id).exForm;
+        try {
+            return this.pairs.get(id).exForm;
+        }catch (Exception e){
+            return "-";
+        }
     }
 
 }

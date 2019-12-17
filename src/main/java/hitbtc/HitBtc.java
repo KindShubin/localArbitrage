@@ -64,8 +64,8 @@ public class HitBtc {
                     int idPair1thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
                     for (int k=j+1; k<quotsCoin.size(); k++){
                         int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
-                        int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для второй транзакции
-                        int idPair3thTransaction = pairs.getPair(quotsCoin.get(j), quotsCoin.get(k));//id пары базовых коинов для третей транзакции
+                        int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
+                        int idPair3thTransaction = pairs.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
                         System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s\t2)%s:%s\t3)%s:%s\n",
                                 baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
                                 coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
