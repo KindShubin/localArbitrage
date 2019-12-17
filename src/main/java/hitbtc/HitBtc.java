@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import DB.DBconnactionVPS;
 import hitbtc.InfoDB.Coins;
+import hitbtc.InfoDB.Hitbtc;
 import hitbtc.InfoDB.Pairs;
 
 public class HitBtc {
@@ -54,6 +55,8 @@ public class HitBtc {
         coins.print();
         Pairs pairs = new Pairs();
         pairs.print();
+        Hitbtc hitbtcdb = new Hitbtc();
+        hitbtcdb.print();
 
         System.exit(0);
 
