@@ -64,7 +64,7 @@ public class HitBtc {
                         int quoteCoinSecondTransaction = quotsCoin.get(k);
                         int idPairDB = getPairDB(j, k);
                         int idPair = pairs.getPair(j, k);
-                        System.out.printf("(%s=$s %s %s) ", idPairDB, idPair, quoteCoinFirstTransaction, quoteCoinSecondTransaction);
+                        System.out.printf("(%s=%s %s %s) ", idPairDB, idPair, quoteCoinFirstTransaction, quoteCoinSecondTransaction);
                     }
                 }
                 System.out.println(" ");
@@ -173,6 +173,7 @@ public class HitBtc {
     //получить номер пары по двум номерам коинов. Ищет USDETH или ETHUSD...
     // есть аналог в классе Pairs
     public static int getPairDB(int coin1, int coin2){
+        System.out.printf("getPairDB() coin1=%s coin2=%s\n" , coin1, coin2);
         String select = new StringBuilder("SELECT id FROM exchange.pairs where (baseCoin=").append(coin1).append(" or baseCoin=").append(coin2)
         .append(") and (quoteCoin=").append(coin1).append(" or quoteCoin=").append(coin2).append(");").toString();
         int result;
