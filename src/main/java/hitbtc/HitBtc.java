@@ -96,7 +96,7 @@ public class HitBtc {
     public static void writeJsonToDB(TickerSymbol[] tickers){
         System.out.println("writeJsonToDB ..............");
         for (TickerSymbol ts : tickers){
-            System.out.print(ts.symbol+" ");
+            System.out.printf("\n%s ",ts.symbol);
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
                     .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now());").toString();
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1 = ").append(ts.ask)
