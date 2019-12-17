@@ -62,5 +62,15 @@ public class Hitbtc {
         return res;
     }
 
+    public int getIdHitbtcPair(int pair){
+        int res = 0;
+        for (Map.Entry<Integer,HitbtcPair> entry : this.hitbtc.entrySet()){
+            if (entry.getValue().pair==pair){
+                res=entry.getValue().id;
+            }
+        }
+        return res;
+    }
+
 }
 

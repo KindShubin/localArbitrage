@@ -62,7 +62,7 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        //writeJsonToDB(tickers);
+        writeJsonToDB(tickers);
         Coins coins = new Coins();
         Pairs pairs = new Pairs();
         Hitbtc hitbtcdb = new Hitbtc();
@@ -244,7 +244,7 @@ public class HitBtc {
         double res = 0.0;
         if (pairs.getBaseCoin(pair)==coinBuy){
             try {
-                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).ask1;
+                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getIdHitbtcPair(pair)).ask1;
             }catch (Exception e){
                 System.out.println("ERROR makeTransaction:");
                 e.printStackTrace();
@@ -258,7 +258,7 @@ public class HitBtc {
         }
         else if (pairs.getBaseCoin(pair)==coinSell){
             try{
-                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).bid1;
+                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getIdHitbtcPair(pair)).bid1;
             }catch (Exception e){
                 System.out.println("ERROR makeTransaction:");
                 e.printStackTrace();
