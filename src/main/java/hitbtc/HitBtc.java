@@ -238,6 +238,7 @@ public class HitBtc {
     //возвращает объем купленных коинов
     public static Double makeTransaction(int coinSell, int coinBuy, double volumeSellCoin, double volumeBuyCoin, Hitbtc snapshotHitbtc, Pairs pairs){
         int pair = pairs.getPair(coinBuy, coinSell);
+        if (pair == 0) {return 99999.99998;}
         double price = 0.0;
         String strPrice="";//потом убрать
         double res = 0.0;
