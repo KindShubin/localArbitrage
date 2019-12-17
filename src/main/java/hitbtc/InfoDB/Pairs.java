@@ -75,6 +75,18 @@ public class Pairs {
         }
     }
 
+    public int getBaseCoin(int pair){
+        return this.pairs.get(pair).baseCoin;
+    }
+
+    public int getQuoteCoin(int pair){
+        return this.pairs.get(pair).quoteCoin;
+    }
+
+    public int geFeeCoin(int pair){
+        return this.pairs.get(pair).feeCoin;
+    }
+
 }
 
 class Pair{
@@ -97,4 +109,5 @@ class Pair{
                 .append("\tfeeCoin:").append(feeCoin).append("\texForm:").append(exForm).toString();
         return result;
     }
+
 }

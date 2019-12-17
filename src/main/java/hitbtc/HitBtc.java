@@ -11,6 +11,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import DB.DBconnactionVPS;
 import hitbtc.InfoDB.Coins;
@@ -20,6 +21,21 @@ import hitbtc.InfoDB.Pairs;
 public class HitBtc {
 
     public static final double FEE = 0.0007;
+
+    //временно для просчета
+    public static final Map<Integer, Double> VALUE = new HashMap<Integer, Double>();
+    static {
+    VALUE.put(1,0.00015);
+    VALUE.put(6,0.008);
+    VALUE.put(59,0.4);
+    VALUE.put(255,1.0);
+    VALUE.put(257,1.0);
+    VALUE.put(267,1.0);
+    VALUE.put(306,0.005);
+    VALUE.put(315,1.0);
+    }
+
+
 
     public static void main(String[] args) throws IOException {
 
@@ -70,6 +86,16 @@ public class HitBtc {
                                 baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
                                 coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
                                 pairs.getExForm(idPair2thTransaction), idPair3thTransaction, pairs.getExForm(idPair3thTransaction));
+                        //////////////////
+                        double volumebaseCoin=makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), 9999.0, hitbtcdb,pairs);
+                        double volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, 8888.0, hitbtcdb,pairs);
+                        double volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, 7777.0,hitbtcdb,pairs);
+                        if (volumeQuoteCoin3and1thTransaction>VALUE.get(quoteCoin1thTransaction)){
+                            System.out.println("+++++++++++++++++++++++++++++++++++++++");
+                        }
+                        else System.out.println("--------------------------------------");
+
+                        ///////////////////
 
                     }
                 }
@@ -200,5 +226,36 @@ public class HitBtc {
         }
         return result;
     }
+
+    //возвращает объем купленных коинов
+    public static Double makeTransaction(int coinSell, int coinBuy, double volumeSellCoin, double volumeBuyCoin, Hitbtc snapshotHitbtc, Pairs pairs){
+        int pair = pairs.getPair(coinBuy, coinSell);
+        double price = 0.0;
+        String strPrice="";//потом убрать
+        double res = 0.0;
+        if (pairs.getBaseCoin(pair)==coinBuy){
+            price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).ask1;
+            strPrice="ask1";
+            res=1*volumeSellCoin/price*(1-FEE);
+            if (volumeBuyCoin<res){
+                res=volumeBuyCoin;
+            }
+        }
+        else if (pairs.getBaseCoin(pair)==coinSell){
+            price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).bid1;
+            strPrice="bid1";
+            res=volumeSellCoin*price/1*(1-FEE);
+            if(volumeBuyCoin<res){
+                res=volumeBuyCoin;
+            }
+        }
+        else{
+            System.out.printf("ERROR |makeTransaction| coinSell:%s, coinBuy:%s, volumeSellCoin:%s, volumeBuyCoin:%s, pair:%s, pairs.getBaseCoin(pair):%s"
+                    ,coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,pair,pairs.getBaseCoin(pair));
+        }
+        System.out.printf("*coinSell:%s, coinBuy:%s, volumeSellCoin:%s,volumeBuyCoin:%s, pair:%s, strPrice:%s, price:%s, res=%s*\n",coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,pair,strPrice,price,res);
+        return res;
+    }
+
 
 }
