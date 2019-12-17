@@ -45,18 +45,34 @@ public class HitBtc {
         }
         System.out.printf("\n\n\n\n");
         //writeJsonToDB(tickers);
-        ArrayList<Integer> uniqPairs=getBaseAltCoins();
-        for(int i : uniqPairs){
+        ArrayList<Integer> baseAltCoins=getBaseAltCoins();
+        for(int i : baseAltCoins){
             ArrayList<Integer> quotsCoin = getQuoteCoinsForBaseCoin(i);
-            System.out.printf("Base coin %s: %s\n" , i, quotsCoin.toString());
+            System.out.printf("Base coin:%s\tQuoteCoins:%s\n" , i, quotsCoin.toString());
+            if(quotsCoin.size()>1){
+                // массив исключающий пары в далнейшем
+                ArrayList<Integer> arrDisableQuoteCoin = new ArrayList<>();
+                for (int j=0; j<quotsCoin.size(); j++){
+                    arrDisableQuoteCoin.add(quotsCoin.get(j));
+                    int quoteCoinFirstTransaction = quotsCoin.get(j);
+                    for (int k=j+1; k<quotsCoin.size(); k++){
+                        int quoteCoinSecondTransaction = quotsCoin.get(k);
+                        System.out.printf("(%s;%s) ", quoteCoinFirstTransaction, quoteCoinSecondTransaction);
+                    }
+                }
+                System.out.println(" ");
+            }
         }
 
         Coins coins = new Coins();
-        coins.print();
+        //coins.print();
         Pairs pairs = new Pairs();
-        pairs.print();
+        //pairs.print();
         Hitbtc hitbtcdb = new Hitbtc();
-        hitbtcdb.print();
+        //hitbtcdb.print();
+
+
+
 
         System.exit(0);
 
@@ -103,6 +119,7 @@ public class HitBtc {
         }
     }
 
+    //Выборка базовых монет которые торгуются на бирже к USD, BTC, ETH и т.д.
     public static ArrayList<Integer> getBaseAltCoins(){
         //1,6,59,255,257,267,306,315 - id монет к которым торгуется пары(BTC, ETH, USD...)
         String select = "SELECT baseCoin FROM exchange.pairs where baseCoin not in (1,6,59,255,257,267,306,315) group by baseCoin;";
