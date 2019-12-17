@@ -238,7 +238,7 @@ public class HitBtc {
     //возвращает объем купленных коинов
     public static Double makeTransaction(int coinSell, int coinBuy, double volumeSellCoin, double volumeBuyCoin, Hitbtc snapshotHitbtc, Pairs pairs){
         int pair = pairs.getPair(coinBuy, coinSell);
-        if (pair == 0) {return 99999.99998;}
+        if (pair == 0) {return 99999.99999;}
         double price = 0.0;
         String strPrice="";//потом убрать
         double res = 0.0;
@@ -247,8 +247,8 @@ public class HitBtc {
                 price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).ask1;
             }catch (Exception e){
                 System.out.println("ERROR makeTransaction:");
-                System.out.println(e.toString());
-                return 99999.99999;
+                e.printStackTrace();
+                return 99999.99998;
             }
             strPrice="ask1";
             res=1*volumeSellCoin/price*(1-FEE);
@@ -261,8 +261,8 @@ public class HitBtc {
                 price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getId(pair)).bid1;
             }catch (Exception e){
                 System.out.println("ERROR makeTransaction:");
-                System.out.println(e.toString());
-                return 99999.99999;
+                e.printStackTrace();
+                return 99999.99997;
             }
             strPrice="bid1";
             res=volumeSellCoin*price/1*(1-FEE);
