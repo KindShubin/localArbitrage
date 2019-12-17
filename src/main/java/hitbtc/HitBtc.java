@@ -62,7 +62,7 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        writeJsonToDB(tickers);
+        //writeJsonToDB(tickers);
         Coins coins = new Coins();
         Pairs pairs = new Pairs();
         Hitbtc hitbtcdb = new Hitbtc();

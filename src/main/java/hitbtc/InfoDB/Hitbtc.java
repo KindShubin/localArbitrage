@@ -63,15 +63,19 @@ public class Hitbtc {
     }
 
     public int getIdHitbtcPair(int pair){
-        int res = 0;
         for (Map.Entry<Integer,HitbtcPair> entry : this.hitbtc.entrySet()){
-            if (entry.getValue().pair==pair){
-                System.out.println("|getIdHitbtcPair| entry.getValue().pair="+entry.getValue().pair);
-                System.out.println("|getIdHitbtcPair| entry.getValue().id="+entry.getValue().id);
-                res=entry.getValue().id;
+            try {
+                if (entry.getValue().pair == pair) {
+                    return entry.getValue().id;
+                }
+            } catch (Exception e){
+                System.out.println("|getIdHitbtcPair| Error");
+                System.out.println("|getIdHitbtcPair| entry.getValue().pair=" + entry.getValue().pair);
+                System.out.println("|getIdHitbtcPair| entry.getValue().id=" + entry.getValue().id);
+                e.printStackTrace();
             }
         }
-        return res;
+        return pair;
     }
 
 }
