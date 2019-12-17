@@ -94,13 +94,14 @@ public class HitBtc {
     //исходник не json, а массив TickerSymbol[] полученый из метода jsonTickerToArrayTickers(String json)
     //записывается базовая инфо пара, и ask1, bid1
     public static void writeJsonToDB(TickerSymbol[] tickers){
+        System.out.println("writeJsonToDB ..............");
         for (TickerSymbol ts : tickers){
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
                     .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now());").toString();
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1 = ").append(ts.ask)
                     .append(", date=now() WHERE (pair = (select id from exchange.pairs where exForm='").append(ts.symbol).append("'));").toString();
-            System.out.println(insert);
-            System.out.println(update);
+            //System.out.println(insert);
+            //System.out.println(update);
             int i = 0;
             try{
                 i = DBconnactionVPS.executeQueryInt(update);
@@ -113,17 +114,17 @@ public class HitBtc {
                 System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
                 try {
                     DBconnactionVPS.executeQuery(insert);
-                    System.out.println(ts.symbol+" insert DONE");
+                    //System.out.println(ts.symbol+" insert DONE");
                 } catch (SQLException e) {
-                    System.out.println("Insert ERROR:");
+                    //System.out.println("Insert ERROR:");
                     e.printStackTrace();
                 }
             }
             else{
-                System.out.println(ts.symbol+" update DONE");
+                //System.out.println(ts.symbol+" update DONE");
             }
-            System.out.println("writeJsonToDB done");
         }
+        System.out.println("writeJsonToDB done");
     }
 
     //Выборка базовых монет которые торгуются на бирже к USD, BTC, ETH и т.д.
@@ -179,6 +180,8 @@ public class HitBtc {
             ArrayList<HashMap> resDB = DBconnactionVPS.getResultSet(select);
             result=GetVal.getInt(resDB.get(0),"id");
         } catch (SQLException e) {
+            System.out.println("ERROR getPairDB()");
+            System.out.println(e.toString());
             e.printStackTrace();
         }
         return result;
