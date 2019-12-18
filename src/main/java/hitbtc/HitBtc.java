@@ -241,9 +241,10 @@ public class HitBtc {
         if (pair == 0) {return 0.0;}
         double price = 0.0;
         String strPrice="";//потом убрать
+        int idHitbtcPair=0;
         double res = 0.0;
         if (pairs.getBaseCoin(pair)==coinBuy){
-            int idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
+            idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
             System.out.println("idHitbtcPair:"+idHitbtcPair);
             if(idHitbtcPair<1){
                 return res;
@@ -256,7 +257,7 @@ public class HitBtc {
             }
         }
         else if (pairs.getBaseCoin(pair)==coinSell){
-            int idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
+            idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
             System.out.println("idHitbtcPair:"+idHitbtcPair);
             if(idHitbtcPair<1){
                 return res;
@@ -272,7 +273,7 @@ public class HitBtc {
             System.out.printf("ERROR |makeTransaction| coinSell:%s, coinBuy:%s, volumeSellCoin:%s, volumeBuyCoin:%s, pair:%s, pairs.getBaseCoin(pair):%s"
                     ,coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,pair,pairs.getBaseCoin(pair));
         }
-        System.out.printf("*coinSell:%s, coinBuy:%s, volumeSellCoin:%s,volumeBuyCoin:%s, pair:%s, strPrice:%s, price:%s, res=%s*\n",coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,pair,strPrice,price,res);
+        System.out.printf("*coinSell:%s, coinBuy:%s, volumeSellCoin:%s,volumeBuyCoin:%s, idHitbtcPair:%s, pair:%s, strPrice:%s, price:%s, res=%s*\n",coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,idHitbtcPair,pair,strPrice,price,res);
         return res;
     }
 
