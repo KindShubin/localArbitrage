@@ -1,4 +1,4 @@
-package hitbtc.InfoDB;
+package hitbtc.InfoDB.Hitbtc;
 
 import java.sql.Timestamp;
 import java.util.Map;

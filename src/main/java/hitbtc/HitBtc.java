@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import DB.DBconnactionVPS;
-import hitbtc.InfoDB.Coins;
-import hitbtc.InfoDB.Hitbtc;
-import hitbtc.InfoDB.Pairs;
+import hitbtc.InfoDB.Coins.Coins;
+import hitbtc.InfoDB.Hitbtc.Hitbtc;
+import hitbtc.InfoDB.Pairs.Pairs;
 
 public class HitBtc {
 
@@ -238,19 +238,17 @@ public class HitBtc {
     //возвращает объем купленных коинов
     public static Double makeTransaction(int coinSell, int coinBuy, double volumeSellCoin, double volumeBuyCoin, Hitbtc snapshotHitbtc, Pairs pairs){
         int pair = pairs.getPair(coinBuy, coinSell);
-        System.out.println(snapshotHitbtc.getIdHitbtcPair(pair));
-        if (pair == 0) {return 99999.99999;}
+        if (pair == 0) {return 0.0;}
         double price = 0.0;
         String strPrice="";//потом убрать
         double res = 0.0;
         if (pairs.getBaseCoin(pair)==coinBuy){
-            try {
-                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getIdHitbtcPair(pair)).ask1;
-            }catch (Exception e){
-                System.out.println("ERROR makeTransaction:");
-                e.printStackTrace();
-                return 99999.99998;
+            int idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
+            System.out.println("idHitbtcPair:"+idHitbtcPair);
+            if(idHitbtcPair<1){
+                return res;
             }
+            price=snapshotHitbtc.hitbtc.get(idHitbtcPair).ask1;
             strPrice="ask1";
             res=1*volumeSellCoin/price*(1-FEE);
             if (volumeBuyCoin<res){
@@ -258,13 +256,12 @@ public class HitBtc {
             }
         }
         else if (pairs.getBaseCoin(pair)==coinSell){
-            try{
-                price=snapshotHitbtc.hitbtc.get(snapshotHitbtc.getIdHitbtcPair(pair)).bid1;
-            }catch (Exception e){
-                System.out.println("ERROR makeTransaction:");
-                e.printStackTrace();
-                return 99999.99997;
+            int idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
+            System.out.println("idHitbtcPair:"+idHitbtcPair);
+            if(idHitbtcPair<1){
+                return res;
             }
+            price=snapshotHitbtc.hitbtc.get(idHitbtcPair).bid1;
             strPrice="bid1";
             res=volumeSellCoin*price/1*(1-FEE);
             if(volumeBuyCoin<res){

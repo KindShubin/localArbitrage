@@ -1,4 +1,4 @@
-package hitbtc.InfoDB;
+package hitbtc.InfoDB.Hitbtc;
 
 import DB.DBconnactionVPS;
 import DB.GetVal;
@@ -12,7 +12,7 @@ import java.util.Map;
 public class Hitbtc {
 
     public static final String SELECT = "SELECT id, pair, bid1, ask1, bid2, ask2, bid3, ask3, bid4, ask4, bid5, ask5, date, description FROM exchange.hitbtc;";
-    public Map<Integer,HitbtcPair> hitbtc;
+    public Map<Integer, HitbtcPair> hitbtc;
 
     public Hitbtc(String select){
         this.hitbtc= new HashMap<>();
@@ -75,7 +75,7 @@ public class Hitbtc {
                 e.printStackTrace();
             }
         }
-        return pair;
+        return 0;
     }
 
 }
