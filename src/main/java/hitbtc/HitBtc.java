@@ -25,14 +25,23 @@ public class HitBtc {
     //временно для просчета
     public static final Map<Integer, Double> VALUE = new HashMap<Integer, Double>();
     static {
-    VALUE.put(1,0.00015);
-    VALUE.put(6,0.008);
-    VALUE.put(59,0.4);
-    VALUE.put(255,1.0);
-    VALUE.put(257,1.0);
-    VALUE.put(267,1.0);
-    VALUE.put(306,0.005);
-    VALUE.put(315,1.0);
+        VALUE.put(1,1.0);
+        VALUE.put(6,1.0);
+        VALUE.put(59,1.0);
+        VALUE.put(255,1.0);
+        VALUE.put(257,1.0);
+        VALUE.put(267,1.0);
+        VALUE.put(306,1.0);
+        VALUE.put(315,1.0);
+
+    //VALUE.put(1,0.00015);
+    //VALUE.put(6,0.008);
+    //VALUE.put(59,0.4);
+    //VALUE.put(255,1.0);
+    //VALUE.put(257,1.0);
+    //VALUE.put(267,1.0);
+    //VALUE.put(306,0.005);
+    //VALUE.put(315,1.0);
     }
 
 
@@ -62,7 +71,7 @@ public class HitBtc {
             ts.print();
         }
         System.out.printf("\n\n\n\n");
-        //writeJsonToDB(tickers);
+        writeJsonToDB(tickers);
         Coins coins = new Coins();
         Pairs pairs = new Pairs();
         Hitbtc hitbtcdb = new Hitbtc();
@@ -136,6 +145,7 @@ public class HitBtc {
     public static void writeJsonToDB(TickerSymbol[] tickers){
         System.out.println("writeJsonToDB ..............");
         for (TickerSymbol ts : tickers){
+            if(ts.symbol=="USDT"){ts.symbol="USD";}
             System.out.printf("\n%s ",ts.symbol);
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
                     .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now());").toString();
