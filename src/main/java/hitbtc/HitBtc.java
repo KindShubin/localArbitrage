@@ -245,7 +245,6 @@ public class HitBtc {
         double res = 0.0;
         if (pairs.getBaseCoin(pair)==coinBuy){
             idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
-            System.out.println("idHitbtcPair:"+idHitbtcPair);
             if(idHitbtcPair<1){
                 return res;
             }
@@ -258,7 +257,6 @@ public class HitBtc {
         }
         else if (pairs.getBaseCoin(pair)==coinSell){
             idHitbtcPair=snapshotHitbtc.getIdHitbtcPair(pair);
-            System.out.println("idHitbtcPair:"+idHitbtcPair);
             if(idHitbtcPair<1){
                 return res;
             }
