@@ -87,33 +87,32 @@ public class HitBtc {
                     arrDisableQuoteCoin.add(quotsCoin.get(j));
                     int quoteCoin1thTransaction = quotsCoin.get(j);//базовый коин для первой транзакции
                     int idPair1thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
-                    for (int k=j+1; k<quotsCoin.size(); k++){
-                        int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
-                        int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
-                        int idPair3thTransaction = pairs.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
-                        System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s\t2)%s:%s\t3)%s:%s\n",
-                                baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
-                                coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
-                                pairs.getExForm(idPair2thTransaction), idPair3thTransaction, pairs.getExForm(idPair3thTransaction));
-                        //////////////////
-                        boolean check = true;
-                        double volumebaseCoin=makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), 9999.0, hitbtcdb,pairs);
-                        if (volumebaseCoin==99999.9999) {check = false;}
-                        double volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, 8888.0, hitbtcdb,pairs);
-                        if (volumeQuoteCoin2thTransacrion == 99999.99999){check=false;}
-                        double volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, 7777.0,hitbtcdb,pairs);
-                        if (volumeQuoteCoin3and1thTransaction == 99999.99999){check=false;}
-                        if (check){
-                            if (volumeQuoteCoin3and1thTransaction>VALUE.get(quoteCoin1thTransaction)){
-                                System.out.println("+++++++++++++++++++++++++++++++++++++++");
+                    for (int k=0; k<quotsCoin.size(); k++){//for (int k=j+1; k<quotsCoin.size(); k++){
+                        if (k!=j){
+                            int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
+                            int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
+                            int idPair3thTransaction = pairs.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
+                            System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s\t2)%s:%s\t3)%s:%s\n",
+                                    baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
+                                    coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
+                                    pairs.getExForm(idPair2thTransaction), idPair3thTransaction, pairs.getExForm(idPair3thTransaction));
+                            //////////////////
+                            boolean check = true;
+                            double volumebaseCoin=makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), 9999.0, hitbtcdb,pairs);
+                            if (volumebaseCoin==99999.9999) {check = false;}
+                            double volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, 8888.0, hitbtcdb,pairs);
+                            if (volumeQuoteCoin2thTransacrion == 99999.99999){check=false;}
+                            double volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, 7777.0,hitbtcdb,pairs);
+                            if (volumeQuoteCoin3and1thTransaction == 99999.99999){check=false;}
+                            if (check){
+                                if (volumeQuoteCoin3and1thTransaction>VALUE.get(quoteCoin1thTransaction)){
+                                    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+                                }
+                                //else System.out.println("--------------------------------------");
+                            } else {
+                                System.out.println("??????????????????????????????????");
                             }
-                            else System.out.println("--------------------------------------");
-                        } else {
-                            System.out.println("??????????????????????????????????");
                         }
-
-                        ///////////////////
-
                     }
                 }
                 System.out.println(" ");
