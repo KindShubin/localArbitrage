@@ -46,13 +46,13 @@ public class HitBtc {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         String url = "https://api.hitbtc.com/api/2/public/ticker";
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<30; v++ ) {
+        for(int v=0; v<30; v++, Thread.sleep(3000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
