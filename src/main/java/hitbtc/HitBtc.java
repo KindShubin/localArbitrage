@@ -52,7 +52,7 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<30; v++, Thread.sleep(3000) ) {
+        for(int v=0; v<50; v++, Thread.sleep(4000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
@@ -141,7 +141,7 @@ public class HitBtc {
             //pairs.print();
             //Hitbtc hitbtcdb = new Hitbtc();
             //hitbtcdb.print();
-            sb.append("v:").append(vv).append(" ").append(sb1.toString()).append("\n");
+            sb.append("v").append(v).append(":").append(vv).append(":\t").append(sb1.toString()).append("\n");
 
         }
         System.out.println(sb.toString());
