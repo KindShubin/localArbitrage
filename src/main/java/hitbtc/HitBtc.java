@@ -52,7 +52,7 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<50; v++, Thread.sleep(4000) ) {
+        for(int v=0; v<1; v++, Thread.sleep(4000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
@@ -160,11 +160,11 @@ public class HitBtc {
     public static void writeJsonToDB(TickerSymbol[] tickers){
         System.out.println("writeJsonToDB ..............");
         for (TickerSymbol ts : tickers){
-            if(ts.symbol=="USDT"){ts.symbol="USD";}
+            //if(ts.symbol=="USDT"){ts.symbol="USD";}
             System.out.printf("\n%s ",ts.symbol);
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
                     .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now());").toString();
-            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1 = ").append(ts.ask)
+            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1=").append(ts.ask)
                     .append(", date=now() WHERE (pair = (select id from exchange.pairs where exForm='").append(ts.symbol).append("'));").toString();
             //System.out.println(insert);
             //System.out.println(update);
@@ -174,7 +174,6 @@ public class HitBtc {
                 System.out.print("output UPDATE:"+i+" ");
             } catch (SQLException e) {
                 System.out.println("update ERROR ");
-                //e.printStackTrace();
                 if (i!=0){
                     System.out.println("ERROR wtf");
                     System.out.println(e.toString());
@@ -183,7 +182,9 @@ public class HitBtc {
             if (i==0){
                 //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
                 try {
-                    DBconnactionVPS.executeQuery(insert);
+                    System.out.println(insert);
+                    System.out.println(DBconnactionVPS.executeQuery(insert));
+                    //DBconnactionVPS.executeQuery(insert);
                     System.out.print("Insert DONE");
                 } catch (SQLException e) {
                     System.out.println("Insert ERROR:");
