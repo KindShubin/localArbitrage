@@ -126,6 +126,56 @@ public class DBconnactionVPS {
         return qntAffectedRows;
     }
 
+    //
+    public static Exception executeQueryInsert(String query) throws SQLException {
+// executing SELECT query
+        setProperties();
+        //setPropertiesLite();
+        Connection con = null;
+        Statement stmt = null;
+        SQLException sqlException = null;
+        boolean boolException = false;
+        try {
+            // opening database connection to MySQL server
+            con = DriverManager.getConnection(url, p);
+            // getting Statement object to execute query
+            con.setAutoCommit(true);
+            stmt = con.createStatement();
+            // блок для отображения типов данных столбцов БД а также манипуляция с ними
+            //stmt.executeUpdate(query);
+            System.out.println("stmt.executeUpdate(query):");
+            System.out.println(stmt.execute(query));
+        } catch (SQLException e) {
+            System.out.println("execute SELECT query in executeQuery is failed:");
+            e.printStackTrace();
+            boolException=true;
+            sqlException=e;
+        }
+        finally {
+            //////closeConnection(stmt, con);
+//            System.out.println(LogsT.printDate() + "execute SELECT query in executeQuery is OK");
+            try {
+                stmt.close();
+            } catch(SQLException se) {
+                System.out.println("closeConnectionWithRs -- STMT is NOT closed");
+                se.printStackTrace();
+            }
+            try {
+                con.close();
+            } catch(SQLException se) {
+                System.out.println("closeConnectionWithRs -- CON is NOT closed");
+                se.printStackTrace();
+            }
+        }
+        if (boolException){
+            System.out.println("executeQuery() get Exception -- return this exception");
+            return sqlException;
+            //throw new SQLException(sqlException);
+        } else {
+            return null;
+        }
+    }
+
     public static ArrayList<HashMap> getResultSet(String query) throws SQLException {
 // executing SELECT query
 //        Properties p=new Properties();

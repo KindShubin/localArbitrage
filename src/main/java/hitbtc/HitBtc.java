@@ -183,8 +183,8 @@ public class HitBtc {
                 //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
                 try {
                     System.out.println(insert);
-                    System.out.println(DBconnactionVPS.executeQuery(insert));
                     //DBconnactionVPS.executeQuery(insert);
+                    DBconnactionVPS.executeQueryInsert(insert);
                     System.out.print("Insert DONE");
                 } catch (SQLException e) {
                     System.out.println("Insert ERROR:");
