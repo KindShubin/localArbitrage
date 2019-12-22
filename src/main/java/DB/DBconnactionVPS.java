@@ -144,7 +144,7 @@ public class DBconnactionVPS {
             // блок для отображения типов данных столбцов БД а также манипуляция с ними
             //stmt.executeUpdate(query);
             System.out.println("stmt.executeUpdate(query):");
-            System.out.println(stmt.execute(query));
+            System.out.println(stmt.executeUpdate(query));
         } catch (SQLException e) {
             System.out.println("execute SELECT query in executeQuery is failed:");
             e.printStackTrace();
