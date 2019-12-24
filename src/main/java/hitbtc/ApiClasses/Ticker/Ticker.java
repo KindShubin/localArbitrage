@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Ticker {
-    public HashMap<String,TickerSymbol> tickers;
+    public HashMap<String,TickerSymbol> tickers = new HashMap<String, TickerSymbol>();
     public static final String APIURL = "https://api.hitbtc.com/api/2/public/ticker";
 
     public Ticker(TickerSymbol[] arrTickerSymbol){

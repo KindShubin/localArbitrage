@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Currencys {
 
-    public HashMap<String,Currency> currencys;
+    public HashMap<String,Currency> currencys = new HashMap<String, Currency>();
     public static final String APIURL = "https://api.hitbtc.com/api/2/public/currency";
 
     public Currencys() throws IOException {

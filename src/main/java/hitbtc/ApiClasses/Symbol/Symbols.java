@@ -15,7 +15,7 @@ import java.util.Map;
 public class Symbols {
 
     public static final String APIURL = "https://api.hitbtc.com/api/2/public/symbol";
-    public HashMap<String,Symbol> symbols;
+    public HashMap<String,Symbol> symbols = new HashMap<String, Symbol>();
 
     public Symbols(ArrayList<Symbol> arrSymols){
         for(Symbol smbl : arrSymols){
