@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import DB.DBconnactionVPS;
+import hitbtc.ApiClasses.Ticker.TickerSymbol;
 import hitbtc.InfoDB.Coins.Coins;
 import hitbtc.InfoDB.Hitbtc.Hitbtc;
 import hitbtc.InfoDB.Pairs.Pairs;
@@ -74,9 +75,7 @@ public class HitBtc {
             System.out.println(response.toString());
             TickerSymbol[] tickers = jsonTickerToArrayTickers(response.toString());
             System.out.println("tickers:");
-            for (TickerSymbol ts : tickers) {
-                ts.print();
-            }
+            System.out.println(tickers.toString());
             System.out.printf("\n\n\n\n");
             writeJsonToDB(tickers);
             Coins coins = new Coins();
@@ -162,10 +161,13 @@ public class HitBtc {
         for (TickerSymbol ts : tickers){
             //if(ts.symbol=="USDT"){ts.symbol="USD";}
             System.out.printf("\n%s ",ts.symbol);
-            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((select id from exchange.pairs where exForm='")
-                    .append(ts.symbol).append("') , ").append(ts.bid).append(", ").append(ts.ask).append(", now())").toString();
+            String selectIdPair = new StringBuilder().append("select id from exchange.pairs where exForm=\"").append(ts.symbol).append("\"").toString();
+            System.out.println(selectIdPair);
+            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((").append(selectIdPair).append("),").append(ts.bid).append(",")
+                    .append(ts.ask).append(", now())").toString();
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(ts.bid).append(", ask1=").append(ts.ask)
-                    .append(", date=now() WHERE (pair = (select id from exchange.pairs where exForm='").append(ts.symbol).append("'))").toString();
+                    .append(", date=now() WHERE (pair = (").append(selectIdPair).append("))").toString();
+
             //System.out.println(insert);
             //System.out.println(update);
             int i = 0;
@@ -181,6 +183,25 @@ public class HitBtc {
             }
             if (i==0){
                 //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
+                ArrayList<HashMap> resID = null;
+                try {
+                    resID = DBconnactionVPS.getResultSet(selectIdPair);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                if (GetVal.getInt(resID.get(0),"id")>1){
+                    try {
+                        System.out.println(insert);
+                        //DBconnactionVPS.executeQuery(insert);
+                        DBconnactionVPS.executeQueryInsert(insert);
+                        System.out.print("Insert DONE");
+                    } catch (SQLException e) {
+                        System.out.println("Insert ERROR:");
+                        e.printStackTrace();
+                    }
+                } else {
+                    //String insertToPairs = ""
+                }
                 try {
                     System.out.println(insert);
                     //DBconnactionVPS.executeQuery(insert);
@@ -299,6 +320,16 @@ public class HitBtc {
         }
         System.out.printf("*coinSell:%s, coinBuy:%s, volumeSellCoin:%s,volumeBuyCoin:%s, idHitbtcPair:%s, pair:%s, strPrice:%s, price:%s, res=%s*\n",coinSell,coinBuy,volumeSellCoin,volumeBuyCoin,idHitbtcPair,pair,strPrice,price,res);
         return res;
+    }
+
+    public static void insertNewPairToDB(String symbol) throws SQLException {
+        String selectCheck = new StringBuilder().append("SELECT id FROM exchange.pairs where exForm = ").append(symbol).toString();
+        ArrayList<HashMap> rsSelectCheck = DBconnactionVPS.getResultSet(selectCheck);
+        if (GetVal.getInt(rsSelectCheck.get(0),"id")>1){
+            System.out.println("Error|insertNewPairToDB| Symbol alredy in DB");
+        } else {
+
+        }
     }
 
 
