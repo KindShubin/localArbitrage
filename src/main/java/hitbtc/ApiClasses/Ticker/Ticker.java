@@ -25,7 +25,10 @@ public class Ticker {
         URL obj = new URL(APIURL);
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader in = null;
+        try{
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        } catch (Exception e){}
         StringBuffer respond = new StringBuffer();
         String line;
         while((line=in.readLine()) != null){

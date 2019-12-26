@@ -39,11 +39,15 @@ public class Currency {
     }
 
     public Currency(String strCurrency) throws IOException {
+        if(strCurrency=="USDT"){strCurrency="USD";}
         String url = new StringBuilder().append("https://api.hitbtc.com/api/2/public/currency/").append(strCurrency).toString();
         URL obj = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        }catch (Exception e){}
         String inputLine;
         StringBuffer response = new StringBuffer();
         while ((inputLine = in.readLine()) != null) {
@@ -51,18 +55,32 @@ public class Currency {
         }
         in.close();
         Gson g = new Gson();
-        Currency tempCurrency =  g.fromJson(response.toString(), Currency.class);
-        this.id=tempCurrency.id;
-        this.fullName=tempCurrency.fullName;
-        this.crypto=tempCurrency.crypto;
-        this.payinEnabled=tempCurrency.payinEnabled;
-        this.payinPaymentId=tempCurrency.payinPaymentId;
-        this.payinConfirmations=tempCurrency.payinConfirmations;
-        this.payoutEnabled=tempCurrency.payoutEnabled;
-        this.payoutIsPaymentId=tempCurrency.payoutIsPaymentId;
-        this.transferEnabled=tempCurrency.transferEnabled;
-        this.delisted=tempCurrency.delisted;
-        this.payoutFee=tempCurrency.payoutFee;
+        Currency tempCurrency = null;
+        try {
+            tempCurrency =  g.fromJson(response.toString(), Currency.class);
+            this.id=tempCurrency.id;
+            this.fullName=tempCurrency.fullName;
+            this.crypto=tempCurrency.crypto;
+            this.payinEnabled=tempCurrency.payinEnabled;
+            this.payinPaymentId=tempCurrency.payinPaymentId;
+            this.payinConfirmations=tempCurrency.payinConfirmations;
+            this.payoutEnabled=tempCurrency.payoutEnabled;
+            this.payoutIsPaymentId=tempCurrency.payoutIsPaymentId;
+            this.transferEnabled=tempCurrency.transferEnabled;
+            this.delisted=tempCurrency.delisted;
+            this.payoutFee=tempCurrency.payoutFee;
+        } catch (Exception e){}
+        this.id=null;
+        this.fullName=null;
+        this.crypto=false;
+        this.payinEnabled=false;
+        this.payinPaymentId=false;
+        this.payinConfirmations=0;
+        this.payoutEnabled=false;
+        this.payoutIsPaymentId=false;
+        this.transferEnabled=false;
+        this.delisted=false;
+        this.payoutFee=null;
     }
 
     public String toString(){

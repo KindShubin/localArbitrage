@@ -39,7 +39,10 @@ public class TickerSymbol {
         URL obj = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader in = null;
+        try{
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        } catch (Exception e){}
         String inputLine;
         StringBuffer response = new StringBuffer();
         while ((inputLine = in.readLine()) != null) {
@@ -47,17 +50,29 @@ public class TickerSymbol {
         }
         in.close();
         Gson g = new Gson();
-        TickerSymbol tempTickerSymbol =  g.fromJson(response.toString(), TickerSymbol.class);
-        this.ask=tempTickerSymbol.ask;
-        this.bid=tempTickerSymbol.bid;
-        this.last=tempTickerSymbol.last;
-        this.open=tempTickerSymbol.open;
-        this.low=tempTickerSymbol.low;
-        this.high=tempTickerSymbol.high;
-        this.volume=tempTickerSymbol.volume;
-        this.volumeQuote=tempTickerSymbol.volumeQuote;
-        this.timestamp=tempTickerSymbol.timestamp;
-        this.symbol=tempTickerSymbol.symbol;
+        try{
+            TickerSymbol tempTickerSymbol =  g.fromJson(response.toString(), TickerSymbol.class);
+            this.ask=tempTickerSymbol.ask;
+            this.bid=tempTickerSymbol.bid;
+            this.last=tempTickerSymbol.last;
+            this.open=tempTickerSymbol.open;
+            this.low=tempTickerSymbol.low;
+            this.high=tempTickerSymbol.high;
+            this.volume=tempTickerSymbol.volume;
+            this.volumeQuote=tempTickerSymbol.volumeQuote;
+            this.timestamp=tempTickerSymbol.timestamp;
+            this.symbol=tempTickerSymbol.symbol;
+        } catch (Exception e){}
+        this.ask=-1.0;
+        this.bid=-1.0;
+        this.last=-1.0;
+        this.open=-1.0;
+        this.low=-1.0;
+        this.high=-1.0;
+        this.volume=-1.0;
+        this.volumeQuote=-1.0;
+        this.timestamp=null;
+        this.symbol=null;
 
     }
 

@@ -37,7 +37,10 @@ public class Symbol {
         URL obj = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader in = null;
+        try{
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        } catch (Exception e){}
         String inputLine;
         StringBuffer response = new StringBuffer();
         while ((inputLine = in.readLine()) != null) {
@@ -45,15 +48,25 @@ public class Symbol {
         }
         in.close();
         Gson g = new Gson();
-        Symbol tempSymbol =  g.fromJson(response.toString(), Symbol.class);
-        this.id=tempSymbol.id;
-        this.baseCurrency=tempSymbol.baseCurrency;
-        this.quoteCurrency=tempSymbol.quoteCurrency;
-        this.quantityIncrement=tempSymbol.quantityIncrement;
-        this.tickSize=tempSymbol.tickSize;
-        this.takeLiquidityRate=tempSymbol.takeLiquidityRate;
-        this.provideLiquidityRate=tempSymbol.provideLiquidityRate;
-        this.feeCurrency=tempSymbol.feeCurrency;
+        try{
+            Symbol tempSymbol =  g.fromJson(response.toString(), Symbol.class);
+            this.id=tempSymbol.id;
+            this.baseCurrency=tempSymbol.baseCurrency;
+            this.quoteCurrency=tempSymbol.quoteCurrency;
+            this.quantityIncrement=tempSymbol.quantityIncrement;
+            this.tickSize=tempSymbol.tickSize;
+            this.takeLiquidityRate=tempSymbol.takeLiquidityRate;
+            this.provideLiquidityRate=tempSymbol.provideLiquidityRate;
+            this.feeCurrency=tempSymbol.feeCurrency;
+        } catch (Exception e){}
+        this.id=null;
+        this.baseCurrency=null;
+        this.quoteCurrency=null;
+        this.quantityIncrement=null;
+        this.tickSize=null;
+        this.takeLiquidityRate=null;
+        this.provideLiquidityRate=null;
+        this.feeCurrency=null;
     }
 
     public String toString(){
