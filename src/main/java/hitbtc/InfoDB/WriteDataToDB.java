@@ -61,12 +61,14 @@ public class WriteDataToDB {
             rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
         }
         int idFeeCoin = GetVal.getInt(rsFeeCoin.get(0),"id");
-        if (idBaseCoin>0 & idQuoteCoin>0 & idFeeCoin>0){
+        if (idBaseCoin>0 & idQuoteCoin>0 & idFeeCoin>0 & symbol.id!=null){
             String update = new StringBuilder().append("UPDATE exchange.pairs SET baseCoin=").append(idBaseCoin).append(", quoteCoin =").append(idQuoteCoin).append(", feeCoin =")
                     .append(idFeeCoin).append(" WHERE exForm=\"").append(symbol.id).append("\"").toString();
             String insert = new StringBuilder().append("INSERT INTO exchange.pairs (baseCoin, quoteCoin, feeCoin, exForm) VALUES (").append(idBaseCoin).append(", ")
                     .append(idQuoteCoin).append(", ").append(idFeeCoin).append(", \"").append(symbol.id).append("\")").toString();
-            if (DBconnactionVPS.executeQueryInt(update)<1){
+            int g = DBconnactionVPS.executeQueryInt(update);
+            System.out.println("g="+g);
+            if (g<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
                     System.out.println("WriteDataToDB.toDBPair| Insert Done");
                 } else {
@@ -75,7 +77,7 @@ public class WriteDataToDB {
             } else {
                     System.out.println("WriteDataToDB.toDBPair| Update Done");
             }
-        }
+        } else { System.out.println("WriteDataToDB.toDBPair| update and insert didn't start");}
     }
 
     public static void toDBPairs(Symbols symbols) throws IOException, SQLException {
