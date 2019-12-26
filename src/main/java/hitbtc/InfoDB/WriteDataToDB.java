@@ -45,7 +45,7 @@ public class WriteDataToDB {
         String selectFeeCoin=new StringBuilder().append("SELECT id FROM exchange.coins where abbreviation=\"").append(feeCoin).append("\"").toString();
         ArrayList<HashMap> rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
         ArrayList<HashMap> rsQuoteCoin = DBconnactionVPS.getResultSet(selectQuoteCoin);
-        ArrayList<HashMap> rsFeeCoin = DBconnactionVPS.getResultSet(feeCoin);
+        ArrayList<HashMap> rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
         if (rsBaseCoin.size()==0){
             toDBCoin(new Currency(baseCoin));
             rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
