@@ -32,7 +32,7 @@ public class WriteDataToDBhitbtc {
         //Ticker ticks = new Ticker();
         //System.out.println("ticks:");
         //System.out.println(ticks);
-
+        System.exit(0);
     }
 
 }

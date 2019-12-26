@@ -26,14 +26,15 @@ public class Ticker {
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
         BufferedReader in = null;
-        try{
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        } catch (Exception e){}
         StringBuffer respond = new StringBuffer();
         String line;
-        while((line=in.readLine()) != null){
-            respond.append(line);
-        }
+        try{
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            while((line=in.readLine()) != null){
+                respond.append(line);
+            }
+            in.close();
+        } catch (Exception e){}
         TickerSymbol[] arrTickerSymbol = getArrTickerSymbol(respond.toString());
         for(TickerSymbol ts : arrTickerSymbol){
             this.tickers.put(ts.symbol,ts);

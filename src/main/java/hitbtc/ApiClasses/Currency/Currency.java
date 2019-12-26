@@ -45,19 +45,18 @@ public class Currency {
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
         BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        }catch (Exception e){}
         String inputLine;
         StringBuffer response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        Gson g = new Gson();
-        Currency tempCurrency = null;
         try {
-            tempCurrency =  g.fromJson(response.toString(), Currency.class);
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        }catch (Exception e){}
+        Gson g = new Gson();
+        try {
+            Currency tempCurrency =  g.fromJson(response.toString(), Currency.class);
             this.id=tempCurrency.id;
             this.fullName=tempCurrency.fullName;
             this.crypto=tempCurrency.crypto;

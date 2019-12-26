@@ -27,6 +27,7 @@ public class WriteDataToDBcoins {
         //Currencys currs = new Currencys();
         //System.out.println("currs:");
         //System.out.println(currs);
+        System.exit(0);
     }
 
 }

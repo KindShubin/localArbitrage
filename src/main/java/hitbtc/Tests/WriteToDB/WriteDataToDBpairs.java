@@ -32,5 +32,6 @@ public class WriteDataToDBpairs {
         //Symbols symbs = new Symbols();
         //System.out.println("symbs:");
         //System.out.println(symbs);
+        System.exit(0);
     }
 }
