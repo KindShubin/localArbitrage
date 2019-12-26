@@ -94,19 +94,21 @@ public class WriteDataToDB {
             toDBPair(new Symbol(strPair));
             rsIdPair = DBconnactionVPS.getResultSet(selectIdPair);
         }
-        int idPair = GetVal.getInt(rsIdPair.get(0),"id");
-        String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(tickerSymbol.ask).append(", bid1=").append(tickerSymbol.bid)
-                .append(", date=now() where id=").append(idPair).toString();
-        String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(tickerSymbol.bid)
-                .append(", ").append(tickerSymbol.ask).append(", now())").toString();
-        if (DBconnactionVPS.executeQueryInt(update)<1){
-            if (DBconnactionVPS.executeQueryInt(insert)==1){
-                System.out.println("WriteDataToDB.toDBHitbtc| Insert Done");
+        if (rsIdPair.size()>0){
+            int idPair = GetVal.getInt(rsIdPair.get(0),"id");
+            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(tickerSymbol.ask).append(", bid1=").append(tickerSymbol.bid)
+                    .append(", date=now() where id=").append(idPair).toString();
+            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(tickerSymbol.bid)
+                    .append(", ").append(tickerSymbol.ask).append(", now())").toString();
+            if (DBconnactionVPS.executeQueryInt(update)<1){
+                if (DBconnactionVPS.executeQueryInt(insert)==1){
+                    System.out.println("WriteDataToDB.toDBHitbtc| Insert Done");
+                } else {
+                    System.out.println("WriteDataToDB.toDBHitbtc| Insert fail!!!");
+                }
             } else {
-                System.out.println("WriteDataToDB.toDBHitbtc| Insert fail!!!");
+                System.out.println("WriteDataToDB.toDBHitbtc| Update Done");
             }
-        } else {
-            System.out.println("WriteDataToDB.toDBHitbtc| Update Done");
         }
     }
 
