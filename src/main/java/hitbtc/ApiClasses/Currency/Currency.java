@@ -68,7 +68,7 @@ public class Currency {
             this.transferEnabled=tempCurrency.transferEnabled;
             this.delisted=tempCurrency.delisted;
             this.payoutFee=tempCurrency.payoutFee;
-        } catch (Exception e){}
+        } catch (Exception e){
         this.id=null;
         this.fullName=null;
         this.crypto=false;
@@ -80,6 +80,7 @@ public class Currency {
         this.transferEnabled=false;
         this.delisted=false;
         this.payoutFee=null;
+        }
     }
 
     public String toString(){

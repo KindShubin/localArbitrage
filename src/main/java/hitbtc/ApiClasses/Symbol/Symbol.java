@@ -46,7 +46,9 @@ public class Symbol {
                 response.append(inputLine);
             }
             in.close();
-        } catch (Exception e){}
+        } catch (Exception e){
+
+        }
         Gson g = new Gson();
         try{
             Symbol tempSymbol =  g.fromJson(response.toString(), Symbol.class);
@@ -58,7 +60,7 @@ public class Symbol {
             this.takeLiquidityRate=tempSymbol.takeLiquidityRate;
             this.provideLiquidityRate=tempSymbol.provideLiquidityRate;
             this.feeCurrency=tempSymbol.feeCurrency;
-        } catch (Exception e){}
+        } catch (Exception e){
         this.id=null;
         this.baseCurrency=null;
         this.quoteCurrency=null;
@@ -67,6 +69,7 @@ public class Symbol {
         this.takeLiquidityRate=null;
         this.provideLiquidityRate=null;
         this.feeCurrency=null;
+        }
     }
 
     public String toString(){

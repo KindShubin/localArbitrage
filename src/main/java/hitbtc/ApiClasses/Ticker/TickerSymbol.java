@@ -62,7 +62,7 @@ public class TickerSymbol {
             this.volumeQuote=tempTickerSymbol.volumeQuote;
             this.timestamp=tempTickerSymbol.timestamp;
             this.symbol=tempTickerSymbol.symbol;
-        } catch (Exception e){}
+        } catch (Exception e){
         this.ask=-1.0;
         this.bid=-1.0;
         this.last=-1.0;
@@ -73,6 +73,7 @@ public class TickerSymbol {
         this.volumeQuote=-1.0;
         this.timestamp=null;
         this.symbol=null;
+        }
 
     }
 
