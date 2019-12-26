@@ -14,10 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import DB.DBconnactionVPS;
+import hitbtc.ApiClasses.Ticker.Ticker;
 import hitbtc.ApiClasses.Ticker.TickerSymbol;
 import hitbtc.InfoDB.Coins.Coins;
 import hitbtc.InfoDB.Hitbtc.Hitbtc;
 import hitbtc.InfoDB.Pairs.Pairs;
+import hitbtc.InfoDB.WriteDataToDB;
 
 public class HitBtc {
 
@@ -34,6 +36,7 @@ public class HitBtc {
         VALUE.put(267,1.0);
         VALUE.put(306,1.0);
         VALUE.put(315,1.0);
+        VALUE.put(392,1.0);
 
     //VALUE.put(1,0.00015);
     //VALUE.put(6,0.008);
@@ -58,33 +61,37 @@ public class HitBtc {
             StringBuilder sb1= new StringBuilder();
             int vv=0;
 
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-
-            connection.setRequestMethod("GET");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+//            URL obj = new URL(url);
+//            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+//
+//            connection.setRequestMethod("GET");
+//
+//            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//            String inputLine;
+//            StringBuffer response = new StringBuffer();
+//
+//            while ((inputLine = in.readLine()) != null) {
+//                response.append(inputLine);
+//            }
+//            in.close();
+//
+//            System.out.println(response.toString());
+//            TickerSymbol[] tickers = jsonTickerToArrayTickers(response.toString());
+//            System.out.println("tickers:");
+//            System.out.println(tickers.toString());
+//            System.out.printf("\n\n\n\n");
+            Ticker ticker = new Ticker();
+            try {
+                WriteDataToDB.toDBHitbtcAll(ticker);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            in.close();
-
-            System.out.println(response.toString());
-            TickerSymbol[] tickers = jsonTickerToArrayTickers(response.toString());
-            System.out.println("tickers:");
-            System.out.println(tickers.toString());
-            System.out.printf("\n\n\n\n");
-            writeJsonToDB(tickers);
-            Coins coins = new Coins();
-            Pairs pairs = new Pairs();
+            Coins coinsdb = new Coins();
+            Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
             ArrayList<Integer> baseAltCoins = getBaseAltCoins();
             for (int baseAltCoin : baseAltCoins) {
-                //ArrayList<Integer> quotsCoinDB = getQuoteCoinsForBaseCoinDB(i);
-                ArrayList<Integer> quotsCoin = pairs.getArrQuoteCoinsForBaseCoin(baseAltCoin);
+                ArrayList<Integer> quotsCoin = pairsdb.getArrQuoteCoinsForBaseCoin(baseAltCoin);
                 System.out.printf("|Base coin:%s\tQuoteCoins:%s\n", baseAltCoin, quotsCoin.toString());
                 if (quotsCoin.size() > 1) {
                     // массив исключающий пары в далнейшем
@@ -92,27 +99,27 @@ public class HitBtc {
                     for (int j = 0; j < quotsCoin.size(); j++) {
                         arrDisableQuoteCoin.add(quotsCoin.get(j));
                         int quoteCoin1thTransaction = quotsCoin.get(j);//базовый коин для первой транзакции
-                        int idPair1thTransaction = pairs.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
+                        int idPair1thTransaction = pairsdb.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
                         for (int k = 0; k < quotsCoin.size(); k++) {//for (int k=j+1; k<quotsCoin.size(); k++){
                             if (k != j) {
                                 int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
-                                int idPair2thTransaction = pairs.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
-                                int idPair3thTransaction = pairs.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
+                                int idPair2thTransaction = pairsdb.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
+                                int idPair3thTransaction = pairsdb.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
                                 System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s\t2)%s:%s\t3)%s:%s\n",
-                                        baseAltCoin, coins.getAbbr(baseAltCoin), quoteCoin1thTransaction, coins.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
-                                        coins.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairs.getExForm(idPair1thTransaction), idPair2thTransaction,
-                                        pairs.getExForm(idPair2thTransaction), idPair3thTransaction, pairs.getExForm(idPair3thTransaction));
+                                        baseAltCoin, coinsdb.getAbbr(baseAltCoin), quoteCoin1thTransaction, coinsdb.getAbbr(quoteCoin1thTransaction), quoteCoin2thTransaction,
+                                        coinsdb.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairsdb.getExForm(idPair1thTransaction), idPair2thTransaction,
+                                        pairsdb.getExForm(idPair2thTransaction), idPair3thTransaction, pairsdb.getExForm(idPair3thTransaction));
                                 //////////////////
                                 boolean check = true;
-                                double volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), 9999.0, hitbtcdb, pairs);
+                                double volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), 9999.0, hitbtcdb, pairsdb);
                                 if (volumebaseCoin == 99999.9999) {
                                     check = false;
                                 }
-                                double volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, 8888.0, hitbtcdb, pairs);
+                                double volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, 8888.0, hitbtcdb, pairsdb);
                                 if (volumeQuoteCoin2thTransacrion == 99999.99999) {
                                     check = false;
                                 }
-                                double volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, 7777.0, hitbtcdb, pairs);
+                                double volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, 7777.0, hitbtcdb, pairsdb);
                                 if (volumeQuoteCoin3and1thTransaction == 99999.99999) {
                                     check = false;
                                 }
@@ -120,7 +127,7 @@ public class HitBtc {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
                                         System.out.println("+++++++++++++++++++++++++++++++++++++++");
                                         vv++;
-                                        sb1.append(pairs.getExForm(idPair1thTransaction)).append("-").append(pairs.getExForm(idPair2thTransaction)).append("-").append(pairs.getExForm(idPair3thTransaction)).append("\t");
+                                        sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction)).append("\t");
 
                                     }
                                     //else System.out.println("--------------------------------------");
@@ -219,6 +226,7 @@ public class HitBtc {
     //Выборка базовых монет которые торгуются на бирже к USD, BTC, ETH и т.д.
     public static ArrayList<Integer> getBaseAltCoins(){
         //1,6,59,255,257,267,306,315 - id монет к которым торгуется пары(BTC, ETH, USD...)
+        //392
         String select = "SELECT baseCoin FROM exchange.pairs where baseCoin not in (1,6,59,255,257,267,306,315) group by baseCoin;";
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<HashMap> dbResult = null;
