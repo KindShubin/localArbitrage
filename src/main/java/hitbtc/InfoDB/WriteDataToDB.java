@@ -21,12 +21,12 @@ public class WriteDataToDB {
         String insert = new StringBuilder().append("INSERT INTO exchange.coins (abbreviation, name) VALUES (\"").append(currency.id).append("\", \"").append(currency.fullName).append("\")").toString();
         if (DBconnactionVPS.executeQueryInt(update)<1){
             if (DBconnactionVPS.executeQueryInt(insert)==1){
-                System.out.println("WriteDataToDB.toDBCoin| Insert Done");
+                System.out.printf("|WriteDataToDB.toDBCoin| %s Insert Done\n", currency.id);
             } else {
-                System.out.println("WriteDataToDB.toDBCoin| Insert fail!!!!");
+                System.out.printf("|WriteDataToDB.toDBCoin| %s Insert fail!!!!\n", currency.id);
             }
         } else {
-            System.out.println("WriteDataToDB.toDBCoin| Update Done");
+            System.out.printf("|WriteDataToDB.toDBCoin| %s Update Done\n", currency.id);
         }
     }
 
@@ -70,14 +70,14 @@ public class WriteDataToDB {
 //            System.out.println("g="+g);
             if (DBconnactionVPS.executeQueryInt(update)<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
-                    System.out.println("WriteDataToDB.toDBPair| Insert Done");
+                    System.out.printf("|WriteDataToDB.toDBPair| %s Insert Done\n", symbol.id);
                 } else {
-                    System.out.println("WriteDataToDB.toDBPair| Insert fail!!!");
+                    System.out.printf("|WriteDataToDB.toDBPair| %s Insert fail!!!\n", symbol.id);
                 }
             } else {
-                    System.out.println("WriteDataToDB.toDBPair| Update Done");
+                    System.out.printf("|WriteDataToDB.toDBPair| %s Update Done\n", symbol.id);
             }
-        } else { System.out.println("WriteDataToDB.toDBPair| update and insert didn't start");}
+        } else { System.out.printf("|WriteDataToDB.toDBPair| %s update and insert didn't start\n", symbol.id);}
     }
 
     public static void toDBPairs(Symbols symbols) throws IOException, SQLException {
@@ -102,14 +102,14 @@ public class WriteDataToDB {
                     .append(", ").append(tickerSymbol.ask).append(", now())").toString();
             if (DBconnactionVPS.executeQueryInt(update)<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
-                    System.out.println("WriteDataToDB.toDBHitbtc| Insert Done");
+                    System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert Done\n", strPair);
                 } else {
-                    System.out.println("WriteDataToDB.toDBHitbtc| Insert fail!!!");
+                    System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert fail!!!\n", strPair);
                 }
             } else {
-                System.out.println("WriteDataToDB.toDBHitbtc| Update Done");
+                System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
             }
-        }
+        } else { System.out.printf("|WriteDataToDB.toDBHitbtc| %s update and insert didn't start\n", strPair);}
     }
 
     public static void toDBHitbtcAll(Ticker ticker) throws IOException, SQLException {

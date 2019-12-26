@@ -24,6 +24,8 @@ public class WriteDataToDBcoins {
         System.out.println("write:");
         WriteDataToDB.toDBCoin(curr1);
 
+        System.out.printf("\n\n\n\n\n");
+        WriteDataToDB.toDBCoins(new Currencys());
         //Currencys currs = new Currencys();
         //System.out.println("currs:");
         //System.out.println(currs);

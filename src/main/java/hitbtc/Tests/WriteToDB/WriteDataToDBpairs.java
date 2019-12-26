@@ -29,6 +29,10 @@ public class WriteDataToDBpairs {
         System.out.println(symb2.toString());
         System.out.println("write:");
         WriteDataToDB.toDBPair(symb2);
+
+
+        System.out.printf("\n\n\n\n\n");
+        WriteDataToDB.toDBPairs(new Symbols());
         //Symbols symbs = new Symbols();
         //System.out.println("symbs:");
         //System.out.println(symbs);

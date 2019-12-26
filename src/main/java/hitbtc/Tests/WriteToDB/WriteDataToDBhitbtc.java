@@ -29,6 +29,9 @@ public class WriteDataToDBhitbtc {
         System.out.println(tick2.toString());
         System.out.println("write:");
         WriteDataToDB.toDBHitbtc(tick2);
+
+        System.out.printf("\n\n\n\n\n");
+        WriteDataToDB.toDBHitbtcAll(new Ticker());
         //Ticker ticks = new Ticker();
         //System.out.println("ticks:");
         //System.out.println(ticks);
