@@ -66,9 +66,9 @@ public class WriteDataToDB {
                     .append(idFeeCoin).append(" WHERE exForm=\"").append(symbol.id).append("\"").toString();
             String insert = new StringBuilder().append("INSERT INTO exchange.pairs (baseCoin, quoteCoin, feeCoin, exForm) VALUES (").append(idBaseCoin).append(", ")
                     .append(idQuoteCoin).append(", ").append(idFeeCoin).append(", \"").append(symbol.id).append("\")").toString();
-            int g = DBconnactionVPS.executeQueryInt(update);
-            System.out.println("g="+g);
-            if (g<1){
+//            int g = DBconnactionVPS.executeQueryInt(update);
+//            System.out.println("g="+g);
+            if (DBconnactionVPS.executeQueryInt(update)<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
                     System.out.println("WriteDataToDB.toDBPair| Insert Done");
                 } else {

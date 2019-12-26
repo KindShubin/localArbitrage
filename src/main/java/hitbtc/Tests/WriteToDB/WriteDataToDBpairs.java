@@ -23,8 +23,8 @@ public class WriteDataToDBpairs {
         System.out.println(symb1.toString());
         System.out.println("write:");
         WriteDataToDB.toDBPair(symb1);
-        System.out.println("DRTUSDT");
-        Symbol symb2 = new Symbol("DRTUSDT");
+        System.out.println("REPUSDT");
+        Symbol symb2 = new Symbol("REPUSDT");
         System.out.println("symb2:");
         System.out.println(symb2.toString());
         System.out.println("write:");
