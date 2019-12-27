@@ -16,5 +16,7 @@ public class TestOrderbook {
         System.out.println("XRPUSD:\n"+xrpusd.toString1());
         Orderbook xrpusdt = new Orderbook("XRPUSDT", 7);
         System.out.println("XRPUSDT:\n"+xrpusdt.toString1());
+        Orderbook xrpusd1 = new Orderbook("XRPUSD", 10);
+        System.out.println("XRPUSD1:\n"+xrpusd1.toString());
     }
 }

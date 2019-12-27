@@ -64,7 +64,11 @@ public class Orderbook {
     }
 
     public String toString1(){
-        return new StringBuilder().append("ask:").append(this.ask.toString()).append("\t").append("bid:").append(this.bid.toString()).append("\t")
+        String ask;
+        String bid;
+        ask=(this.ask==null)?"":this.ask.toString();
+        bid=this.bid==null?"":this.bid.toString();
+        return new StringBuilder().append("ask:").append(ask).append("\t").append("bid:").append(bid).append("\t")
                 .append("timestamp").append(this.timestamp).append("\n").toString();
     }
 
