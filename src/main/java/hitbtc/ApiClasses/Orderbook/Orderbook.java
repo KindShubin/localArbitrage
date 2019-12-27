@@ -43,11 +43,16 @@ public class Orderbook {
         String ask = "";
         String bid = "";
         for(int i=0; i<this.ask.length; i++){
-            ask += "price:"+this.ask[i].price+" size:"+this.ask[i].size+" ";
-            bid += "bid:"+this.bid[i].price+" size:"+this.bid[i].size+" ";
+            ask += "("+(i+1)+")price:"+this.ask[i].price+",size:"+this.ask[i].size+" ";
+            bid += "("+(i+1)+")price:"+this.bid[i].price+",size:"+this.bid[i].size+" ";
         }
-        
-        return new StringBuilder().append("ask:").append(ask).append("\t").append("bid:").append(bid).append("\t")
+
+        return new StringBuilder().append("ask: ").append(ask).append("\n").append("bid: ").append(bid).append("\n")
+                .append("timestamp").append(this.timestamp).append("\n").toString();
+    }
+
+    public String toString1(){
+        return new StringBuilder().append("ask:").append(this.ask.toString()).append("\t").append("bid:").append(this.bid.toString()).append("\t")
                 .append("timestamp").append(this.timestamp).append("\n").toString();
     }
 
