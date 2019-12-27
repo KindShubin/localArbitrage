@@ -27,10 +27,15 @@ public class Orderbook {
             response.append(inputLine);
         }
         in.close();
+        try{
         Orderbook tempOrderBook = jsonToClass(response.toString());
         this.ask = tempOrderBook.ask;
         this.bid = tempOrderBook.bid;
         this.timestamp = tempOrderBook.timestamp;
+        } catch (Exception e){
+            System.out.println("Orderbook deserialization fail:");
+            e.toString();
+        }
     }
 
     private Orderbook jsonToClass(String json){
