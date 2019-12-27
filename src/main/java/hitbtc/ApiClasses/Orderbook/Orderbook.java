@@ -11,9 +11,9 @@ import java.sql.Timestamp;
 
 public class Orderbook {
 
-    public PriceSize[] ask;
-    public PriceSize[] bid;
-    public Timestamp timestamp;
+    public PriceSize[] ask=null;
+    public PriceSize[] bid=null;
+    public Timestamp timestamp=null;
 
     public Orderbook(String symbol, int limit) throws IOException {
         String url = new StringBuilder().append("https://api.hitbtc.com/api/2/public/orderbook/").append(symbol).append("?limit=").append(limit).toString();
