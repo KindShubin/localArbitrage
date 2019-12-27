@@ -13,8 +13,8 @@ public class TestOrderbook {
         Orderbook arneth = new Orderbook("ARNETH", 6);
         System.out.println("ARNETH:\n"+arneth.toString());
         Orderbook xrpusd = new Orderbook("XRPUSD", 7);
-        System.out.println("XRPUSD:\n"+xrpusd.toString());
+        System.out.println("XRPUSD:\n"+xrpusd.toString1());
         Orderbook xrpusdt = new Orderbook("XRPUSDT", 7);
-        System.out.println("XRPUSDT:\n"+xrpusdt.toString());
+        System.out.println("XRPUSDT:\n"+xrpusdt.toString1());
     }
 }
