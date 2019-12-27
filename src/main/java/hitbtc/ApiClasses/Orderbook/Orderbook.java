@@ -60,7 +60,7 @@ public class Orderbook {
             }
         }
         return new StringBuilder().append("ask: ").append(ask).append("\n").append("bid: ").append(bid).append("\n")
-                .append("timestamp").append(this.timestamp).append("\n").toString();
+                .append("timestamp: ").append(this.timestamp).append("\n").toString();
     }
 
     public String toString1(){
