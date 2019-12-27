@@ -18,15 +18,21 @@ public class Orderbook {
     public Orderbook(String symbol, int limit) throws IOException {
         String url = new StringBuilder().append("https://api.hitbtc.com/api/2/public/orderbook/").append(symbol).append("?limit=").append(limit).toString();
         URL obj = new URL(url);
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        try{
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
         connection.setRequestMethod("GET");
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
+        } catch (Exception e){
+            System.out.println("Orderbook get api fail:");
+            System.out.println(e.toString());
+        }
         try{
         Orderbook tempOrderBook = jsonToClass(response.toString());
         this.ask = tempOrderBook.ask;
