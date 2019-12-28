@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import DB.DBconnactionVPS;
+import hitbtc.ApiClasses.Orderbook.Orderbook;
 import hitbtc.ApiClasses.Ticker.Ticker;
 import hitbtc.ApiClasses.Ticker.TickerSymbol;
 import hitbtc.InfoDB.Coins.Coins;
@@ -56,7 +57,7 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<10; v++, Thread.sleep(4000) ) {
+        for(int v=0; v<1; v++, Thread.sleep(4000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
@@ -126,6 +127,12 @@ public class HitBtc {
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
                                         System.out.println("+++++++++++++++++++++++++++++++++++++++");
+                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
+                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
+                                        Orderbook orderbook3thTr = new Orderbook(pairsdb.getExForm(idPair3thTransaction),3);
+                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair1thTransaction)+"\n"+orderbook1thTr.toString());
+                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair2thTransaction)+"\n"+orderbook2thTr.toString());
+                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair3thTransaction)+"\n"+orderbook3thTr.toString());
                                         vv++;
                                         sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction)).append("\t");
 
