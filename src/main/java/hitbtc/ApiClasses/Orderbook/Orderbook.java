@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 
 public class Orderbook {
 
-    public PriceSize[] ask=null;
-    public PriceSize[] bid=null;
+    public PriceSize[] ask;
+    public PriceSize[] bid;
     public Timestamp timestamp=null;
 
     public Orderbook(String symbol, int limit) throws IOException {
@@ -21,27 +21,37 @@ public class Orderbook {
         String inputLine;
         StringBuffer response = new StringBuffer();
         try{
-        HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-        connection.setRequestMethod("GET");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("GET");
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
         } catch (Exception e){
             System.out.println("Orderbook get api fail:");
             System.out.println(e.toString());
         }
         try{
-        Orderbook tempOrderBook = jsonToClass(response.toString());
-        this.ask = tempOrderBook.ask;
-        this.bid = tempOrderBook.bid;
-        this.timestamp = tempOrderBook.timestamp;
+            Orderbook tempOrderBook = jsonToClass(response.toString());
+            this.ask = tempOrderBook.ask;
+            this.bid = tempOrderBook.bid;
+            this.timestamp = tempOrderBook.timestamp;
         } catch (Exception e){
             System.out.println("Orderbook deserialization fail:");
             e.toString();
         }
+        for (int i=0; i<limit; i++){
+            if(this.ask.length<(i+1)){
+                this.ask[i].price=0.0;
+                this.ask[i].size=0.0;
+            }
+            if(this.bid.length<(i+1)){
+                this.bid[i].price=0.0;
+                this.bid[i].size=0.0;
+            }
+        }
+
     }
 
     private Orderbook jsonToClass(String json){
