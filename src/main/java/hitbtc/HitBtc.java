@@ -59,17 +59,17 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<1; v++, Thread.sleep(4000) ) {
+        for(int v=0; v<20; v++, Thread.sleep(4000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
 
             Ticker ticker = new Ticker();
-//            try {
-//                WriteDataToDB.toDBHitbtcAll(ticker);
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                WriteDataToDB.toDBHitbtcAll(ticker);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
