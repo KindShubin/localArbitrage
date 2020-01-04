@@ -397,7 +397,7 @@ public class HitBtc {
         int i=0;//инкремент для сумирования объемов из OrderBook
         if (firstCoinOnPair(pair, coinSell)){
             strPrice = "bid";
-            while (amountSellCoinFromOrderbook<amountSellCoin){
+            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.length){
                 amountSellCoinFromOrderbook+=ob.bid[i].size;
                 i++;
             }
@@ -405,7 +405,7 @@ public class HitBtc {
             resAmount=price*amountSellCoin*(1-FEE);
         } else {
             strPrice = "ask";
-            while (amountSellCoinFromOrderbook<amountSellCoin){
+            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.length){
                 amountSellCoinFromOrderbook+=ob.ask[0].size*ob.ask[0].price;
                 i++;
             }
