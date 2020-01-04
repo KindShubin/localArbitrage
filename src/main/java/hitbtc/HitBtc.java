@@ -59,36 +59,17 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<2; v++, Thread.sleep(4000) ) {
+        for(int v=0; v<1; v++, Thread.sleep(4000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
 
-//            URL obj = new URL(url);
-//            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-//
-//            connection.setRequestMethod("GET");
-//
-//            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//            String inputLine;
-//            StringBuffer response = new StringBuffer();
-//
-//            while ((inputLine = in.readLine()) != null) {
-//                response.append(inputLine);
-//            }
-//            in.close();
-//
-//            System.out.println(response.toString());
-//            TickerSymbol[] tickers = jsonTickerToArrayTickers(response.toString());
-//            System.out.println("tickers:");
-//            System.out.println(tickers.toString());
-//            System.out.printf("\n\n\n\n");
             Ticker ticker = new Ticker();
-            try {
-                WriteDataToDB.toDBHitbtcAll(ticker);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                WriteDataToDB.toDBHitbtcAll(ticker);
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
@@ -128,7 +109,7 @@ public class HitBtc {
                                 }
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
-                                        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                         finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
 //                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
 //                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
@@ -371,8 +352,8 @@ public class HitBtc {
         System.out.println("obTrans3th: "+obTrans3th.toString());
 
         //продаю QuoteCoin1 покупаю BaseCoin
-        double volBaseCoinTrans1th = obTrans1th.ask[0].size*(1-FEE);
-        double volQuote1CoinTrans1th = obTrans1th.ask[0].size*obTrans1th.ask[0].price;
+        double volBaseCoinTrans1th = obTrans1th.ask.get(0).size*(1-FEE);
+        double volQuote1CoinTrans1th = obTrans1th.ask.get(0).size*obTrans1th.ask.get(0).price;
         //продаю BaseCoin, покупаю QuoteCoin2
         double volBaseCoinTrans2th = volBaseCoinTrans1th;
         double volQuote2CoinTrans2th = getAmountBuyCoinFromPair(pairTrans2th,baseCoin,obTrans2th, volBaseCoinTrans1th);
@@ -397,19 +378,19 @@ public class HitBtc {
         int i=0;//инкремент для сумирования объемов из OrderBook
         if (firstCoinOnPair(pair, coinSell)){
             strPrice = "bid";
-            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.length){
-                amountSellCoinFromOrderbook+=ob.bid[i].size;
+            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
+                amountSellCoinFromOrderbook+=ob.bid.get(i).size;
                 i++;
             }
-            price = ob.bid[i].price;
+            price = ob.bid.get(i).price;
             resAmount=price*amountSellCoin*(1-FEE);
         } else {
             strPrice = "ask";
-            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.length){
-                amountSellCoinFromOrderbook+=ob.ask[0].size*ob.ask[0].price;
+            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
+                amountSellCoinFromOrderbook+=ob.ask.get(i).size*ob.ask.get(i).price;
                 i++;
             }
-            price = ob.ask[i].price;
+            price = ob.ask.get(i).price;
             resAmount = amountSellCoin/price*(1-FEE);
         }
         System.out.printf("|getAmountBuyCoinFromPair| pair:%s, coinSell:%s, amountSellCoin:%s.\t amountSellCoinFromOrderbook:%s, strPrice:%s, price:%s, resAmount:%s\n", pair.exForm, coinSell.abbreviation, amountSellCoin, amountSellCoinFromOrderbook, strPrice, price, resAmount);

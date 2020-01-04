@@ -8,11 +8,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class Orderbook {
 
-    public PriceSize[] ask;
-    public PriceSize[] bid;
+    public ArrayList<PriceSize> ask;
+    public ArrayList<PriceSize> bid;
     public Timestamp timestamp=null;
 
     public Orderbook(String symbol, int limit) throws IOException {
@@ -42,13 +43,11 @@ public class Orderbook {
             e.toString();
         }
         for (int i=0; i<limit; i++){
-            if(this.ask.length<(i+1)){
-                this.ask[i].price=0.0;
-                this.ask[i].size=0.0;
+            if(this.ask.size()<(i+1)){
+                this.ask.add(new PriceSize(0.0, 0.0));
             }
-            if(this.bid.length<(i+1)){
-                this.bid[i].price=0.0;
-                this.bid[i].size=0.0;
+            if(this.bid.size()<(i+1)){
+                this.bid.add(new PriceSize(0.0, 0.0));
             }
         }
 
@@ -64,9 +63,9 @@ public class Orderbook {
         String ask = "";
         String bid = "";
         if (this.ask != null){
-            for(int i=0; i<this.ask.length; i++){
-                ask += "("+(i+1)+")price:"+this.ask[i].price+",size:"+this.ask[i].size+" ";
-                bid += "("+(i+1)+")price:"+this.bid[i].price+",size:"+this.bid[i].size+" ";
+            for(int i=0; i<this.ask.size(); i++){
+                ask += "("+(i+1)+")price:"+this.ask.get(i).price+",size:"+this.ask.get(i).size+" ";
+                bid += "("+(i+1)+")price:"+this.bid.get(i).price+",size:"+this.bid.get(i).size+" ";
             }
         }
         return new StringBuilder().append("ask: ").append(ask).append("\n").append("bid: ").append(bid).append("\n")
