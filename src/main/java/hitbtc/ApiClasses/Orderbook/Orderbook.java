@@ -49,10 +49,10 @@ public class Orderbook {
             e.toString();
         }
         for (int i=0; i<limit; i++){
-            if(this.ask.size()<(i+1)){
+            if(this.ask.size()<(i+1) || this.ask==null){
                 this.ask.add(new PriceSize(0.0, 0.0));
             }
-            if(this.bid.size()<(i+1)){
+            if(this.bid.size()<(i+1) || this.bid==null){
                 this.bid.add(new PriceSize(0.0, 0.0));
             }
         }
@@ -68,6 +68,18 @@ public class Orderbook {
             System.out.println("|Orderbook.jsonToClass| Error:");
             e.toString();
             ob = new Orderbook();
+            try{
+                System.out.println("ask.size"+ob.ask.size());
+            }catch (Exception e1){
+                System.out.println("ask.size error");
+                e1.toString();
+            }
+            try{
+                System.out.println("bid.size"+ob.bid.size());
+            }catch (Exception e2){
+                System.out.println("bid.size error");
+                e2.toString();
+            }
         }
         return ob;
     }
