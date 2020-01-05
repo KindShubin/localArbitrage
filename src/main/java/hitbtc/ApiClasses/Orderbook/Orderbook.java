@@ -56,6 +56,7 @@ public class Orderbook {
             System.out.println("Orderbook deserialization fail. Create empty Orderbook:");
             e.toString();
             Orderbook ob = new Orderbook();
+            ob = fillZeroEmptyOrderbook(ob,limit);
             this.ask=ob.ask;
             this.bid=ob.bid;
             this.timestamp=ob.timestamp;
@@ -73,19 +74,16 @@ public class Orderbook {
             System.out.println("|Orderbook.jsonToClass| Error:");
             e.toString();
             ob = new Orderbook();
-            try{
-                System.out.println("ask.size"+ob.ask.size());
-            }catch (Exception e1){
-                System.out.println("ask.size error");
-                e1.toString();
-            }
-            try{
-                System.out.println("bid.size"+ob.bid.size());
-            }catch (Exception e2){
-                System.out.println("bid.size error");
-                e2.toString();
-            }
         }
+        return ob;
+    }
+
+    private Orderbook fillZeroEmptyOrderbook(Orderbook ob, int limit){
+        for(int i=0; i<limit; i++){
+            ob.ask.add(new PriceSize(0.0,0.0));
+            ob.bid.add(new PriceSize(0.0,0.0));
+        }
+        ob.timestamp=null;
         return ob;
     }
 
