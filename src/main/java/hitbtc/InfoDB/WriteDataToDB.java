@@ -107,15 +107,17 @@ public class WriteDataToDB {
                     System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert fail!!!\n", strPair);
                 }
             } else {
-                System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
+                //System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
             }
         } else { System.out.printf("|WriteDataToDB.toDBHitbtc| %s update and insert didn't start\n", strPair);}
     }
 
     public static void toDBHitbtcAll(Ticker ticker) throws IOException, SQLException {
+        System.out.println("|WriteDataToDB.toDBHitbtcAll| Processing...");
         for (HashMap.Entry<String, TickerSymbol> entry : ticker.tickers.entrySet()){
             toDBHitbtc(entry.getValue());
         }
+        System.out.println("|WriteDataToDB.toDBHitbtcAll| Write finish");
     }
 
 }
