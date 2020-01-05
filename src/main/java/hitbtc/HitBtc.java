@@ -121,7 +121,7 @@ public class HitBtc {
                                 }
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
-                                        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                                         // повторные вычисления но с меткой print true. Для принта доп. информации
                                         volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, hitbtcdb, pairsdb, true);
@@ -316,7 +316,7 @@ public class HitBtc {
             }
             price=snapshotHitbtc.hitbtc.get(idHitbtcPair).ask1;
             strPrice="ask1";
-            res=1*volumeSellCoin/price*(1-FEE);
+            res= price==0?0.0:1*volumeSellCoin/price*(1-FEE);
 // убрал также из входящих параметров  double volumeBuyCoin. На этом этапе это не важно
 //            if (volumeBuyCoin<res){
 //                res=volumeBuyCoin;
