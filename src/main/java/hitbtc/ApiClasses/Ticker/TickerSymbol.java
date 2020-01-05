@@ -63,14 +63,14 @@ public class TickerSymbol {
             this.timestamp=tempTickerSymbol.timestamp;
             this.symbol=tempTickerSymbol.symbol;
         } catch (Exception e){
-        this.ask=-1.0;
-        this.bid=-1.0;
-        this.last=-1.0;
-        this.open=-1.0;
-        this.low=-1.0;
-        this.high=-1.0;
-        this.volume=-1.0;
-        this.volumeQuote=-1.0;
+        this.ask=0.0;
+        this.bid=0.0;
+        this.last=0.0;
+        this.open=0.0;
+        this.low=0.0;
+        this.high=0.0;
+        this.volume=0.0;
+        this.volumeQuote=0.0;
         this.timestamp=null;
         this.symbol=null;
         }
