@@ -16,6 +16,12 @@ public class Orderbook {
     public ArrayList<PriceSize> bid;
     public Timestamp timestamp=null;
 
+    public Orderbook(){
+        this.ask=new ArrayList<PriceSize>();
+        this.bid=new ArrayList<PriceSize>();
+        this.timestamp=null;
+    }
+
     public Orderbook(String symbol, int limit) throws IOException {
         String url = new StringBuilder().append("https://api.hitbtc.com/api/2/public/orderbook/").append(symbol).append("?limit=").append(limit).toString();
         URL obj = new URL(url);
@@ -55,7 +61,14 @@ public class Orderbook {
 
     private Orderbook jsonToClass(String json){
         Gson g = new Gson();
-        Orderbook ob = g.fromJson(json, Orderbook.class);
+        Orderbook ob;
+        try{
+            ob = g.fromJson(json, Orderbook.class);
+        }catch (Exception e){
+            System.out.println("|Orderbook.jsonToClass| Error:");
+            e.toString();
+            ob = new Orderbook();
+        }
         return ob;
     }
 
