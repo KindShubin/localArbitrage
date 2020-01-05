@@ -104,14 +104,14 @@ public class WriteDataToDB {
                     .append(", ").append(ask1).append(", now())").toString();
             if (DBconnactionVPS.executeQueryInt(update)<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
-                    System.out.println("|WriteDataToDB.toDBHitbtc| insert:"+insert);
+                    //System.out.println("|WriteDataToDB.toDBHitbtc| insert:"+insert);
                     System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert Done\n", strPair);
                 } else {
                     System.out.printf("|WriteDataToDB.toDBHitbtc| %s Updste fail. Insert fail!!!\n", strPair);
                 }
             } else {
-                System.out.println("|WriteDataToDB.toDBHitbtc| update:"+update);
-                System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
+                //System.out.println("|WriteDataToDB.toDBHitbtc| update:"+update);
+                //System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
             }
         } else { System.out.printf("|WriteDataToDB.toDBHitbtc| %s update and insert didn't start\n", strPair);}
     }

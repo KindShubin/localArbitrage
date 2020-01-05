@@ -55,7 +55,7 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<1; v++, Thread.sleep(3000) ) {
+        for(int v=0; v<5; v++, Thread.sleep(5000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
