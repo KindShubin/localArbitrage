@@ -403,18 +403,18 @@ public class HitBtc {
             strPrice = "bid";
             while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
                 amountSellCoinFromOrderbook+=ob.bid.get(i).size;
+                price = ob.bid.get(i).price;
                 i++;
             }
-            price = ob.bid.get(i).price;
             resAmount=price*amountSellCoin*(1-FEE);
         } else {
             strPrice = "ask";
             while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
                 amountSellCoinFromOrderbook+=ob.ask.get(i).size*ob.ask.get(i).price;
+                price = ob.ask.get(i).price;
                 i++;
             }
-            price = ob.ask.get(i).price;
-            resAmount = amountSellCoin/price*(1-FEE);
+            resAmount = price==0?0.0:amountSellCoin/price*(1-FEE);//если price 0, то деление на 0.0 выдает результат Infinity
         }
         System.out.printf("|getAmountBuyCoinFromPair| pair:%s, coinSell:%s, amountSellCoin:%s.\t amountSellCoinFromOrderbook:%s, strPrice:%s, price:%s, resAmount:%s\n", pair.exForm, coinSell.abbreviation, amountSellCoin, amountSellCoinFromOrderbook, strPrice, price, resAmount);
         return resAmount;
