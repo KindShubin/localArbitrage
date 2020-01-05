@@ -44,18 +44,23 @@ public class Orderbook {
             this.ask = tempOrderBook.ask;
             this.bid = tempOrderBook.bid;
             this.timestamp = tempOrderBook.timestamp;
+            for (int i=0; i<limit; i++){
+                if(this.ask.size()<(i+1) || this.ask==null){
+                    this.ask.add(new PriceSize(0.0, 0.0));
+                }
+                if(this.bid.size()<(i+1) || this.bid==null){
+                    this.bid.add(new PriceSize(0.0, 0.0));
+                }
+            }
         } catch (Exception e){
-            System.out.println("Orderbook deserialization fail:");
+            System.out.println("Orderbook deserialization fail. Create empty Orderbook:");
             e.toString();
+            Orderbook ob = new Orderbook();
+            this.ask=ob.ask;
+            this.bid=ob.bid;
+            this.timestamp=ob.timestamp;
         }
-        for (int i=0; i<limit; i++){
-            if(this.ask.size()<(i+1) || this.ask==null){
-                this.ask.add(new PriceSize(0.0, 0.0));
-            }
-            if(this.bid.size()<(i+1) || this.bid==null){
-                this.bid.add(new PriceSize(0.0, 0.0));
-            }
-        }
+
 
     }
 

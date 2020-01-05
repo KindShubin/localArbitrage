@@ -3,11 +3,7 @@ package hitbtc;
 import DB.GetVal;
 import com.google.gson.Gson;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +55,7 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<10; v++, Thread.sleep(3000) ) {
+        for(int v=0; v<1; v++, Thread.sleep(3000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
