@@ -96,18 +96,22 @@ public class WriteDataToDB {
         }
         if (rsIdPair.size()>0){
             int idPair = GetVal.getInt(rsIdPair.get(0),"id");
-            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(tickerSymbol.ask).append(", bid1=").append(tickerSymbol.bid)
+            double bid1=tickerSymbol.bid>0?tickerSymbol.bid:0.0;
+            double ask1=tickerSymbol.ask>0?tickerSymbol.ask:0.0;
+            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(ask1).append(", bid1=").append(bid1)
                     .append(", date=now() where id=").append(idPair).toString();
-            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(tickerSymbol.bid)
-                    .append(", ").append(tickerSymbol.ask).append(", now())").toString();
+            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(bid1)
+                    .append(", ").append(ask1).append(", now())").toString();
             if (DBconnactionVPS.executeQueryInt(update)<1){
                 if (DBconnactionVPS.executeQueryInt(insert)==1){
+                    System.out.println("|WriteDataToDB.toDBHitbtc| insert:"+insert);
                     System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert Done\n", strPair);
                 } else {
-                    System.out.printf("|WriteDataToDB.toDBHitbtc| %s Insert fail!!!\n", strPair);
+                    System.out.printf("|WriteDataToDB.toDBHitbtc| %s Updste fail. Insert fail!!!\n", strPair);
                 }
             } else {
-                //System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
+                System.out.println("|WriteDataToDB.toDBHitbtc| update:"+update);
+                System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
             }
         } else { System.out.printf("|WriteDataToDB.toDBHitbtc| %s update and insert didn't start\n", strPair);}
     }
