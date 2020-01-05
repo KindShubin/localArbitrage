@@ -99,7 +99,7 @@ public class WriteDataToDB {
             double bid1=tickerSymbol.bid>0?tickerSymbol.bid:0.0;
             double ask1=tickerSymbol.ask>0?tickerSymbol.ask:0.0;
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(ask1).append(", bid1=").append(bid1)
-                    .append(", date=now() where id=").append(idPair).toString();
+                    .append(", date=now() where pair=").append(idPair).toString();
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(bid1)
                     .append(", ").append(ask1).append(", now())").toString();
             if (DBconnactionVPS.executeQueryInt(update)<1){
