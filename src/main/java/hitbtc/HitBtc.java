@@ -188,12 +188,12 @@ public class HitBtc {
             try{
                 i = DBconnactionVPS.executeQueryInt(update);
                 System.out.print("output UPDATE:"+i+" ");
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.out.println("update ERROR ");
                 if (i!=0){
                     System.out.println("ERROR wtf");
-                    System.out.println(e.toString());
                 }
+                System.out.println(e.toString());
             }
             if (i==0){
                 //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
@@ -206,8 +206,8 @@ public class HitBtc {
                 if (GetVal.getInt(resID.get(0),"id")>1){
                     try {
                         System.out.println(insert);
-                        //DBconnactionVPS.executeQuery(insert);
-                        DBconnactionVPS.executeQueryInsert(insert);
+                        DBconnactionVPS.executeQuery(insert);
+                        //DBconnactionVPS.executeQueryInsert(insert);
                         System.out.print("Insert DONE");
                     } catch (SQLException e) {
                         System.out.println("Insert ERROR:");
@@ -218,8 +218,8 @@ public class HitBtc {
                 }
                 try {
                     System.out.println(insert);
-                    //DBconnactionVPS.executeQuery(insert);
-                    DBconnactionVPS.executeQueryInsert(insert);
+                    DBconnactionVPS.executeQuery(insert);
+                    //DBconnactionVPS.executeQueryInsert(insert);
                     System.out.print("Insert DONE");
                 } catch (SQLException e) {
                     System.out.println("Insert ERROR:");
