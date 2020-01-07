@@ -57,11 +57,11 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<5; v++, Thread.sleep(5000) ) {
+        for(int v=0; v<7; v++, Thread.sleep(5000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
-
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
             Ticker ticker = new Ticker();
             try {
                 WriteDataToDB.toDBHitbtcAll(ticker);
@@ -311,7 +311,7 @@ public class HitBtc {
         Orderbook obTrans2th = new Orderbook(pairTrans2th.exForm,4);
         Orderbook obTrans3th = new Orderbook(pairTrans3th.exForm,4);
 
-        System.out.println("obTrans1th: "+obTrans1th.toString());
+        System.out.println("\nobTrans1th: "+obTrans1th.toString());
         System.out.println("obTrans2th: "+obTrans2th.toString());
         System.out.println("obTrans3th: "+obTrans3th.toString());
 
@@ -329,7 +329,7 @@ public class HitBtc {
                 .append("\nvolQuote1CoinTrans3th:").append(volQuote1CoinTrans3th).append("\tvolQuote2CoinTrans3th:").append(volQuote2CoinTrans3th)
                 .append("\n estimate profit:").append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(quoteCoin1.abbreviation).toString();
         System.out.println(debug);
-        return new StringBuilder().append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(quoteCoin1.abbreviation).toString();
+        return new StringBuilder().append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(" ").append(quoteCoin1.abbreviation).toString();
     }
 
     //отдает объем предполагаемой сделки когда известна пара, монета которая продается и объем продаваемой монеты
