@@ -5,7 +5,9 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,9 +68,11 @@ public class HitBtc {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
             ArrayList<Integer> baseAltCoins = getBaseAltCoins();
             for (int baseAltCoin : baseAltCoins) {
                 ArrayList<Integer> quotsCoin = pairsdb.getArrQuoteCoinsForBaseCoin(baseAltCoin);
@@ -118,11 +122,12 @@ public class HitBtc {
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
                                         System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
                                         // повторные вычисления но с меткой print true. Для принта доп. информации
                                         volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, hitbtcdb, pairsdb, true);
-                                        finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
+                                        String estProfit=finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
 //                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
 //                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
 //                                        Orderbook orderbook3thTr = new Orderbook(pairsdb.getExForm(idPair3thTransaction),3);
@@ -130,8 +135,9 @@ public class HitBtc {
 //                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair2thTransaction)+"\n"+orderbook2thTr.toString());
 //                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair3thTransaction)+"\n"+orderbook3thTr.toString());
                                         vv++;
-                                        sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction)).append("\t");
-
+                                        sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction))
+                                                .append(":").append(estProfit).append("\t");
+                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
                                     }
                                     else {
                                         System.out.println("\tres:"+volumeQuoteCoin3and1thTransaction);
@@ -166,69 +172,7 @@ public class HitBtc {
         return tickers;
     }
 
-    //исходник не json, а массив TickerSymbol[] полученый из метода jsonTickerToArrayTickers(String json)
-    //записывается базовая инфо пара, и ask1, bid1
-    public static void writeJsonToDB(TickerSymbol[] tickers){
-        System.out.println("writeJsonToDB ..............");
-        for (TickerSymbol ts : tickers){
-            //if(ts.symbol=="USDT"){ts.symbol="USD";}
-            System.out.printf("\n%s ",ts.symbol);
-            String selectIdPair = new StringBuilder().append("select id from exchange.pairs where exForm=\"").append(ts.symbol).append("\"").toString();
-            System.out.println(selectIdPair);
-            double bid1=ts.bid>0?ts.bid:0.0;
-            double ask1=ts.ask>0?ts.ask:0.0;
-            String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES ((").append(selectIdPair).append("),").append(bid1).append(",")
-                    .append(ask1).append(", now())").toString();
-            String update = new StringBuilder().append("UPDATE exchange.hitbtc SET bid1=").append(bid1).append(", ask1=").append(ask1)
-                    .append(", date=now() WHERE (pair = (").append(selectIdPair).append("))").toString();
-
-            //System.out.println(insert);
-            //System.out.println(update);
-            int i = 0;
-            try{
-                i = DBconnactionVPS.executeQueryInt(update);
-                System.out.print("output UPDATE:"+i+" ");
-            } catch (Exception e) {
-                System.out.println("update ERROR ");
-                if (i!=0){
-                    System.out.println("ERROR wtf");
-                }
-                System.out.println(e.toString());
-            }
-            if (i==0){
-                //System.out.println("ERROR. Update to exchenge.hitbtc failed. Try insert");
-                ArrayList<HashMap> resID = null;
-                try {
-                    resID = DBconnactionVPS.getResultSet(selectIdPair);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                if (GetVal.getInt(resID.get(0),"id")>1){
-                    try {
-                        System.out.println(insert);
-                        DBconnactionVPS.executeQuery(insert);
-                        //DBconnactionVPS.executeQueryInsert(insert);
-                        System.out.print("Insert DONE");
-                    } catch (SQLException e) {
-                        System.out.println("Insert ERROR:");
-                        e.printStackTrace();
-                    }
-                } else {
-                    //String insertToPairs = ""
-                }
-                try {
-                    System.out.println(insert);
-                    DBconnactionVPS.executeQuery(insert);
-                    //DBconnactionVPS.executeQueryInsert(insert);
-                    System.out.print("Insert DONE");
-                } catch (SQLException e) {
-                    System.out.println("Insert ERROR:");
-                    e.printStackTrace();
-                }
-            }
-        }
-        System.out.println("writeJsonToDB done");
-    }
+    // удалил метод writeJsonToDB(TickerSymbol[] tickers). Есть спец класс WriteDataToDB.java там все есть
 
     //Выборка базовых монет которые торгуются на бирже к USD, BTC, ETH и т.д.
     public static ArrayList<Integer> getBaseAltCoins(){
@@ -353,7 +297,8 @@ public class HitBtc {
     // получает на вход base coin и 2 quote coin которые показали предварительную доходность.
     // заьирает по api orderbook каждой пары и считает уже по существующим объемам все 3 транзакции.
     //   ????? переделать так чтобы на вход приходили объекты снапшота БД с Pairs, Coins  и т.д. и данные брать из обекта ??????????
-    public static void finalProfit(Coin baseCoin, Coin quoteCoin1, Coin quoteCoin2) throws SQLException, IOException {
+    ////////////////////временно сделал чтобы отдавало String с возможной прибылью
+    public static String finalProfit(Coin baseCoin, Coin quoteCoin1, Coin quoteCoin2) throws SQLException, IOException {
         Pair pairTrans1th = new Pair(getPairDB(baseCoin.id,quoteCoin1.id));
         Pair pairTrans2th = new Pair(getPairDB(baseCoin.id,quoteCoin2.id));
         Pair pairTrans3th = new Pair(getPairDB(quoteCoin1.id,quoteCoin2.id));
@@ -362,17 +307,17 @@ public class HitBtc {
         System.out.println("pairTrans2th: "+pairTrans2th.toString());
         System.out.println("pairTrans3th: "+pairTrans3th.toString());
 
-        Orderbook obTrans1th = new Orderbook(pairTrans1th.exForm,3);
-        Orderbook obTrans2th = new Orderbook(pairTrans2th.exForm,3);
-        Orderbook obTrans3th = new Orderbook(pairTrans3th.exForm,3);
+        Orderbook obTrans1th = new Orderbook(pairTrans1th.exForm,4);
+        Orderbook obTrans2th = new Orderbook(pairTrans2th.exForm,4);
+        Orderbook obTrans3th = new Orderbook(pairTrans3th.exForm,4);
 
         System.out.println("obTrans1th: "+obTrans1th.toString());
         System.out.println("obTrans2th: "+obTrans2th.toString());
         System.out.println("obTrans3th: "+obTrans3th.toString());
 
         //продаю QuoteCoin1 покупаю BaseCoin
-        double volBaseCoinTrans1th = obTrans1th.ask.get(0).size*(1-FEE);
-        double volQuote1CoinTrans1th = obTrans1th.ask.get(0).size*obTrans1th.ask.get(0).price;
+        double volBaseCoinTrans1th = obTrans1th.ask.get(0).size;
+        double volQuote1CoinTrans1th = obTrans1th.ask.get(0).size*obTrans1th.ask.get(0).price*(1+FEE);
         //продаю BaseCoin, покупаю QuoteCoin2
         double volBaseCoinTrans2th = volBaseCoinTrans1th;
         double volQuote2CoinTrans2th = getAmountBuyCoinFromPair(pairTrans2th,baseCoin,obTrans2th, volBaseCoinTrans1th);
@@ -381,9 +326,10 @@ public class HitBtc {
         double volQuote2CoinTrans3th = volQuote2CoinTrans2th;
         String debug = new StringBuilder().append("volBaseCoinTrans1th:").append(volBaseCoinTrans1th).append("\tvolQuote1CoinTrans1th:").append(volQuote1CoinTrans1th)
                 .append("\nvolBaseCoinTrans2th:").append(volBaseCoinTrans2th).append("\tvolQuote2CoinTrans2th:").append(volQuote2CoinTrans2th)
-                .append("\nvolQuote1CoinTrans3th:").append(volQuote1CoinTrans3th).append("\tvolQuote2CoinTrans3th:").append(volQuote2CoinTrans3th).toString();
+                .append("\nvolQuote1CoinTrans3th:").append(volQuote1CoinTrans3th).append("\tvolQuote2CoinTrans3th:").append(volQuote2CoinTrans3th)
+                .append("\n estimate profit:").append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(quoteCoin1.abbreviation).toString();
         System.out.println(debug);
-
+        return new StringBuilder().append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(quoteCoin1.abbreviation).toString();
     }
 
     //отдает объем предполагаемой сделки когда известна пара, монета которая продается и объем продаваемой монеты
