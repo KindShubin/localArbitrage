@@ -57,22 +57,22 @@ public class HitBtc {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int v=0; v<7; v++, Thread.sleep(5000) ) {
+        for(int v=0; v<1; v++, Thread.sleep(5000) ) {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" before write to DB");
             Ticker ticker = new Ticker();
             try {
                 WriteDataToDB.toDBHitbtcAll(ticker);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" after write to DB");
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
+            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" after make objects Coins Pairs Hitbtc");
             ArrayList<Integer> baseAltCoins = getBaseAltCoins();
             for (int baseAltCoin : baseAltCoins) {
                 ArrayList<Integer> quotsCoin = pairsdb.getArrQuoteCoinsForBaseCoin(baseAltCoin);
@@ -122,11 +122,12 @@ public class HitBtc {
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
                                         System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
+                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" перед предварительным просчетом");
                                         // повторные вычисления но с меткой print true. Для принта доп. информации
                                         volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, hitbtcdb, pairsdb, true);
+                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" перед финальным просчетом");
                                         String estProfit=finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
 //                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
 //                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
@@ -137,7 +138,7 @@ public class HitBtc {
                                         vv++;
                                         sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction))
                                                 .append(":").append(estProfit).append("\t");
-                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date()));
+                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" после финального просчета");
                                     }
                                     else {
                                         System.out.println("\tres:"+volumeQuoteCoin3and1thTransaction);
