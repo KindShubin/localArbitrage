@@ -163,6 +163,7 @@ public class HitBtc {
 
         }
         System.out.println(sb.toString());
+        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" конец");
         System.exit(0);
 
     }
