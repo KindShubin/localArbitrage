@@ -61,18 +61,25 @@ public class HitBtc {
 
             StringBuilder sb1= new StringBuilder();
             int vv=0;
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" before write to DB");
+            String times="";
+            String time1= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tbefore write to DB").toString();
+            times=times+time1;
+            System.out.println(time1);
             Ticker ticker = new Ticker();
             try {
                 WriteDataToDB.toDBHitbtcAll(ticker);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" after write to DB");
+            String time2= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tafter write to DB\n").toString();
+            times=times+time2;
+            System.out.println(time2);
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
             Hitbtc hitbtcdb = new Hitbtc();
-            System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" after make objects Coins Pairs Hitbtc");
+            String time3= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tafter make objects Coins Pairs Hitbtc\n").toString();
+            times=times+time3;
+            System.out.println(time3);
             ArrayList<Integer> baseAltCoins = getBaseAltCoins();
             for (int baseAltCoin : baseAltCoins) {
                 ArrayList<Integer> quotsCoin = pairsdb.getArrQuoteCoinsForBaseCoin(baseAltCoin);
@@ -122,12 +129,16 @@ public class HitBtc {
                                 if (check) {
                                     if (volumeQuoteCoin3and1thTransaction > VALUE.get(quoteCoin1thTransaction)) {
                                         System.out.println("\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" перед предварительным просчетом");
+                                        String time4= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tперед предварительным просчетом\n").toString();
+                                        times=times+time4;
+                                        System.out.println(time4);
                                         // повторные вычисления но с меткой print true. Для принта доп. информации
                                         volumebaseCoin = makeTransaction(quoteCoin1thTransaction, baseAltCoin, VALUE.get(quoteCoin1thTransaction), hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin2thTransacrion = makeTransaction(baseAltCoin, quoteCoin2thTransaction, volumebaseCoin, hitbtcdb, pairsdb, true);
                                         volumeQuoteCoin3and1thTransaction = makeTransaction(quoteCoin2thTransaction, quoteCoin1thTransaction, volumeQuoteCoin2thTransacrion, hitbtcdb, pairsdb, true);
-                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" перед финальным просчетом");
+                                        String time5= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tперед финальным просчетом\n").toString();
+                                        times=times+time5;
+                                        System.out.println(time5);
                                         String estProfit=finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
 //                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
 //                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
@@ -138,7 +149,9 @@ public class HitBtc {
                                         vv++;
                                         sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction))
                                                 .append(":").append(estProfit).append("\t");
-                                        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" после финального просчета");
+                                        String time6= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tпосле финального просчета\n").toString();
+                                        times=times+time6;
+                                        System.out.println(time6);
                                     }
                                     else {
                                         System.out.println("\tres:"+volumeQuoteCoin3and1thTransaction);
@@ -160,10 +173,12 @@ public class HitBtc {
             //Hitbtc hitbtcdb = new Hitbtc();
             //hitbtcdb.print();
             sb.append("v").append(v).append(":").append(vv).append(":\t").append(sb1.toString()).append("\n");
+            String time7= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tконец\n").toString();
+            times=times+time7;
+            System.out.println(times);
 
         }
         System.out.println(sb.toString());
-        System.out.println("time:"+new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())+" конец");
         System.exit(0);
 
     }
