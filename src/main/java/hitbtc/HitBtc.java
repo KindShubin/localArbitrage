@@ -62,7 +62,7 @@ public class HitBtc {
             StringBuilder sb1= new StringBuilder();
             int vv=0;
             String times="";
-            String time1= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tbefore write to DB").toString();
+            String time1= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tbefore write to DB\n").toString();
             times=times+time1;
             System.out.println(time1);
             Ticker ticker = new Ticker();
