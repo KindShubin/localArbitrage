@@ -96,11 +96,12 @@ public class HitBtc {
                                 int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
                                 int idPair2thTransaction = pairsdb.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
                                 int idPair3thTransaction = pairsdb.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
-                                System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s(pair%s-%s)\tQuoteCoin2:%s-%s(pair%s-%s)\t1)%s:%s\t2)%s:%s\t3)%s:%s",
-                                        baseAltCoin, coinsdb.getAbbr(baseAltCoin), quoteCoin1thTransaction, coinsdb.getAbbr(quoteCoin1thTransaction), idPair1thTransaction,
-                                        quoteCoin2thTransaction,
-                                        coinsdb.getAbbr(quoteCoin2thTransaction), idPair1thTransaction, pairsdb.getExForm(idPair1thTransaction), idPair2thTransaction,
-                                        pairsdb.getExForm(idPair2thTransaction), idPair3thTransaction, pairsdb.getExForm(idPair3thTransaction));
+                                System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s:%s\t2)%s:%s:%s\t3)%s:%s:%s",
+                                        baseAltCoin, coinsdb.getAbbr(baseAltCoin), quoteCoin1thTransaction, coinsdb.getAbbr(quoteCoin1thTransaction),
+                                        quoteCoin2thTransaction, coinsdb.getAbbr(quoteCoin2thTransaction),
+                                        idPair1thTransaction, pairsdb.getExForm(idPair1thTransaction), ticker.tickers.get(pairsdb.getExForm(idPair1thTransaction)).symbol,
+                                        idPair2thTransaction, pairsdb.getExForm(idPair2thTransaction), ticker.tickers.get(pairsdb.getExForm(idPair2thTransaction)).symbol,
+                                        idPair3thTransaction, pairsdb.getExForm(idPair3thTransaction), ticker.tickers.get(pairsdb.getExForm(idPair3thTransaction)).symbol);
                                 //////////////////
                                 boolean check = true;
                                 double volumebaseCoin=0.0;
