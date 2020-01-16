@@ -623,6 +623,9 @@ public class HitBtc {
         // разница в объеме монет между значениеми просчитаными ранее, при которых есть профит и остаточным объемом в стакане котировок при той же самой цене.
         double deltaBaseCoinTrans1 = volBaseCoinTrans1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,getPriceFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,volBaseCoinTrans1,"ask"),"ask");
         // может имеет смысл перевести по курсу deltaBaseCoinTrans1 = getSummAmountFromOrderbook и отнять уже объем volQuoteCoin1Trnas1 от полученного значения????
+        double getPriceFromOBCoinQ1Tr1=getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask");
+        double getSummAmountFromOBCoinQ1Tr1= getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOBCoinQ1Tr1,"ask");
+        System.out.println("getPriceFromOBCoinQ1Tr1: "+getPriceFromOBCoinQ1Tr1+" getSummAmountFromOBCoinQ1Tr1: "+getSummAmountFromOBCoinQ1Tr1);
         double deltaQuoteCoin1Trans1 = volQuoteCoin1Trnas1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask"),"ask");
         double deltaBaseCoinTrans2 = volBaseCoinTrans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinBase, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinBase, volBaseCoinTrans2, "bid"),"bid");
         double deltaQuoteCoin2Trans2 = volQuoteCoin2Trans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinQuote2, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinQuote2, volQuoteCoin2Trans2, "bid"), "bid");
