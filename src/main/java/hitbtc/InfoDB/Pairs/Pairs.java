@@ -52,7 +52,7 @@ public class Pairs {
         return arrRes;
     }
 
-    public int getPair(int coin1, int coin2){
+    public int getIntPair(int coin1, int coin2){
         int res = 0;
         for (Map.Entry<Integer,Pair> entry : this.pairs.entrySet()){
             if (entry.getValue().baseCoin==coin1 & entry.getValue().quoteCoin==coin2){
@@ -61,6 +61,21 @@ public class Pairs {
             }
             if (entry.getValue().baseCoin==coin2 & entry.getValue().quoteCoin==coin1){
                 res = entry.getKey();
+                break;
+            }
+        }
+        return res;
+    }
+
+    public Pair getPair(int coin1, int coin2){
+        Pair res=null;
+        for (Map.Entry<Integer,Pair> entry : this.pairs.entrySet()){
+            if (entry.getValue().baseCoin==coin1 & entry.getValue().quoteCoin==coin2){
+                res = entry.getValue();
+                break;
+            }
+            if (entry.getValue().baseCoin==coin2 & entry.getValue().quoteCoin==coin1){
+                res = entry.getValue();
                 break;
             }
         }

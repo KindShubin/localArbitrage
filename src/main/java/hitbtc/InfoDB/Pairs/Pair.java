@@ -32,6 +32,8 @@ public class Pair{
         this.exForm= GetVal.getStr(rs.get(0),"exForm");
     }
 
+
+
     public String toString(){
         String result = new StringBuilder().append("id:").append(id).append("\tbaseCoin:").append(baseCoin).append("\tquoteCoin").append(quoteCoin)
                 .append("\tfeeCoin:").append(feeCoin).append("\texForm:").append(exForm).toString();

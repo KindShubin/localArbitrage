@@ -20,7 +20,6 @@ import hitbtc.InfoDB.Coins.Coins;
 import hitbtc.InfoDB.Hitbtc.Hitbtc;
 import hitbtc.InfoDB.Pairs.Pair;
 import hitbtc.InfoDB.Pairs.Pairs;
-import hitbtc.InfoDB.WriteDataToDB;
 
 public class HitBtc {
 
@@ -90,12 +89,12 @@ public class HitBtc {
                     for (int j = 0; j < quotsCoin.size(); j++) {
                         arrDisableQuoteCoin.add(quotsCoin.get(j));
                         int quoteCoin1thTransaction = quotsCoin.get(j);//базовый коин для первой транзакции
-                        int idPair1thTransaction = pairsdb.getPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
+                        int idPair1thTransaction = pairsdb.getIntPair(baseAltCoin, quoteCoin1thTransaction);//id пары для первой транзакции
                         for (int k = 0; k < quotsCoin.size(); k++) {//for (int k=j+1; k<quotsCoin.size(); k++){
                             if (k != j) {
                                 int quoteCoin2thTransaction = quotsCoin.get(k);//базовый коин для второй транзакции
-                                int idPair2thTransaction = pairsdb.getPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
-                                int idPair3thTransaction = pairsdb.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
+                                int idPair2thTransaction = pairsdb.getIntPair(baseAltCoin, quoteCoin2thTransaction);//id пары для второй транзакции
+                                int idPair3thTransaction = pairsdb.getIntPair(quoteCoin1thTransaction, quoteCoin2thTransaction);//id пары базовых коинов для третей транзакции
                                 ///////// блок со сравнение инофрмации из БД и Tickers
                                 String strPair1FromTickerApi="";
                                 String strPair2FromTickerApi="";
@@ -176,7 +175,11 @@ public class HitBtc {
                                         String time5= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tперед финальным просчетом\n").toString();
                                         times=times+time5;
                                         System.out.println(time5);
-                                        String estProfit=finalProfit(coinsdb.coins.get(baseAltCoin),coinsdb.coins.get(quoteCoin1thTransaction),coinsdb.coins.get(quoteCoin2thTransaction));
+                                        Coin coinBase=coinsdb.coins.get(baseAltCoin);
+                                        Coin coinQuote1=coinsdb.coins.get(quoteCoin1thTransaction);
+                                        Coin coinQuote2=coinsdb.coins.get(quoteCoin2thTransaction);
+                                        // первое значение в массиве - кол-во обмена базовых коинов, второе значение - прдположительный профит в coinQuoute1
+                                        ArrayList<Double> estProfit=finalProfit(coinBase,coinQuote1,coinQuote2);
 //                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),3);
 //                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),3);
 //                                        Orderbook orderbook3thTr = new Orderbook(pairsdb.getExForm(idPair3thTransaction),3);
@@ -185,10 +188,22 @@ public class HitBtc {
 //                                        System.out.println("Symbol:"+pairsdb.getExForm(idPair3thTransaction)+"\n"+orderbook3thTr.toString());
                                         vv++;
                                         sb1.append(pairsdb.getExForm(idPair1thTransaction)).append("-").append(pairsdb.getExForm(idPair2thTransaction)).append("-").append(pairsdb.getExForm(idPair3thTransaction))
-                                                .append(":").append(estProfit).append("\t");
-                                        String time6= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tпосле финального просчета\n").toString();
+                                                .append(":").append(estProfit.get(1)).append("\t");
+                                        String time6= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tпосле финального просчета, перед итерациями\n").toString();
                                         times=times+time6;
                                         System.out.println(time6);
+                                        Orderbook orderbook1thTr = new Orderbook(pairsdb.getExForm(idPair1thTransaction),4);
+                                        Orderbook orderbook2thTr = new Orderbook(pairsdb.getExForm(idPair2thTransaction),4);
+                                        Orderbook orderbook3thTr = new Orderbook(pairsdb.getExForm(idPair3thTransaction),4);
+                                        Pair pair1thTrans = pairsdb.getPair(baseAltCoin, quoteCoin1thTransaction);
+                                        Pair pair2thTrans = pairsdb.getPair(baseAltCoin, quoteCoin2thTransaction);
+                                        Pair pair3thTrans = pairsdb.getPair(quoteCoin1thTransaction, quoteCoin2thTransaction);
+                                        Double amountBaseCoin = estProfit.get(0);
+                                        double nextProf = getNextBaseVolume(pair1thTrans,pair2thTrans,pair3thTrans,coinBase,coinQuote1,coinQuote2,orderbook1thTr,orderbook2thTr,orderbook3thTr,amountBaseCoin);
+                                        String time7= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tпосле итераций\n").toString();
+                                        times=times+time7;
+                                        System.out.println(time7);
+
                                     }
                                     else {
                                         System.out.println("\tres:"+volumeQuoteCoin3and1thTransaction);
@@ -210,8 +225,8 @@ public class HitBtc {
             //Hitbtc hitbtcdb = new Hitbtc();
             //hitbtcdb.print();
             sb.append("v").append(v).append(":").append(vv).append(":\t").append(sb1.toString()).append("\n");
-            String time7= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tконец\n").toString();
-            times=times+time7;
+            String time8= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tконец\n").toString();
+            times=times+time8;
             System.out.println(times);
 
         }
@@ -297,7 +312,7 @@ public class HitBtc {
 
     //возвращает объем купленных коинов. На вход пожается инфа из БД
     public static Double makeTransaction(int coinSell, int coinBuy, double volumeSellCoin, Hitbtc snapshotHitbtc, Pairs pairs, boolean print){
-        int pair = pairs.getPair(coinBuy, coinSell);
+        int pair = pairs.getIntPair(coinBuy, coinSell);
         if (pair == 0) {return 0.0;}
         double price = 0.0;
         String strPrice="";//потом убрать
@@ -340,7 +355,7 @@ public class HitBtc {
 
     //возвращает объем купленных коинов. На вход пожается инфа из БД
     public static Double makeTransactionAPI(int coinSell, int coinBuy, double volumeSellCoin, Ticker ticker, Pairs pairs, boolean print){
-        int pair = pairs.getPair(coinBuy, coinSell);
+        int pair = pairs.getIntPair(coinBuy, coinSell);
         if (pair == 0) {return 0.0;}
         String strPair=pairs.pairs.get(pair).exForm;
         //System.out.printf("Pair:%s, strPair%s\n", pair, strPair);
@@ -400,7 +415,7 @@ public class HitBtc {
     // заьирает по api orderbook каждой пары и считает уже по существующим объемам все 3 транзакции.
     //   ????? переделать так чтобы на вход приходили объекты снапшота БД с Pairs, Coins  и т.д. и данные брать из обекта ??????????
     ////////////////////временно сделал чтобы отдавало String с возможной прибылью
-    public static String finalProfit(Coin baseCoin, Coin quoteCoin1, Coin quoteCoin2) throws SQLException, IOException {
+    public static ArrayList<Double> finalProfit(Coin baseCoin, Coin quoteCoin1, Coin quoteCoin2) throws SQLException, IOException {
         Pair pairTrans1th = new Pair(getPairDB(baseCoin.id,quoteCoin1.id));
         Pair pairTrans2th = new Pair(getPairDB(baseCoin.id,quoteCoin2.id));
         Pair pairTrans3th = new Pair(getPairDB(quoteCoin1.id,quoteCoin2.id));
@@ -417,21 +432,44 @@ public class HitBtc {
         System.out.println("obTrans2th: "+obTrans2th.toString());
         System.out.println("obTrans3th: "+obTrans3th.toString());
 
+        boolean profitOrNot= true;// значение используется в цикле при поиске максимально большого кол-ва сделок для транзакции.
+        // если добавление последующих заявок из стакана прводят к тому что итог получается пинус, тогда значение false;
+
+        boolean bottleneckBaseCoinTrans1th=false;
+        boolean bottleneckQuote1CoinTrans1th=false;
+        boolean bottleneckBaseCoinTrans2th=false;
+        boolean bottleneckQuote2CoinTrans2th=false;
+        boolean bottleneckQuote1CoinTrans3th=false;
+        boolean bottleneckQuote2CoinTrans3th=false;
+        double result = 0.0;
+
         //продаю QuoteCoin1 покупаю BaseCoin
-        double volBaseCoinTrans1th = obTrans1th.ask.get(0).size;
-        double volQuote1CoinTrans1th = obTrans1th.ask.get(0).size*obTrans1th.ask.get(0).price*(1+FEE);
+        double volBaseCoinTrans1th = getFirstVolume(obTrans1th, obTrans2th, obTrans3th); //obTrans1th.ask.get(0).size;
+        double volQuote1CoinTrans1th = volBaseCoinTrans1th*obTrans1th.ask.get(0).price*(1+FEE);
         //продаю BaseCoin, покупаю QuoteCoin2
         double volBaseCoinTrans2th = volBaseCoinTrans1th;
-        double volQuote2CoinTrans2th = getAmountBuyCoinFromPair(pairTrans2th,baseCoin,obTrans2th, volBaseCoinTrans1th);
+        double volQuote2CoinTrans2th = getAmountBuyCoinFromPair(pairTrans2th,baseCoin,obTrans2th, volBaseCoinTrans2th);
         //продаю QuoteCoin2, покупаю QuoteCoin1
         double volQuote1CoinTrans3th = getAmountBuyCoinFromPair(pairTrans3th,quoteCoin2,obTrans3th,volQuote2CoinTrans2th);
         double volQuote2CoinTrans3th = volQuote2CoinTrans2th;
+        result=volQuote1CoinTrans3th-volQuote1CoinTrans1th;
+
+        if (result > 0.0) {
+            while (profitOrNot) {
+
+            }
+        }
+
         String debug = new StringBuilder().append("volBaseCoinTrans1th:").append(volBaseCoinTrans1th).append("\tvolQuote1CoinTrans1th:").append(volQuote1CoinTrans1th)
                 .append("\nvolBaseCoinTrans2th:").append(volBaseCoinTrans2th).append("\tvolQuote2CoinTrans2th:").append(volQuote2CoinTrans2th)
                 .append("\nvolQuote1CoinTrans3th:").append(volQuote1CoinTrans3th).append("\tvolQuote2CoinTrans3th:").append(volQuote2CoinTrans3th)
                 .append("\n estimate profit:").append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(quoteCoin1.abbreviation).toString();
         System.out.println(debug);
-        return new StringBuilder().append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(" ").append(quoteCoin1.abbreviation).toString();
+        ArrayList<Double> resArr = new ArrayList<Double>(2);
+        resArr.add(volBaseCoinTrans2th);
+        resArr.add(result);
+        return resArr;
+        //return new StringBuilder().append(volQuote1CoinTrans3th-volQuote1CoinTrans1th).append(" ").append(quoteCoin1.abbreviation).toString();
     }
 
     //отдает объем предполагаемой сделки когда известна пара, монета которая продается и объем продаваемой монеты
@@ -439,22 +477,26 @@ public class HitBtc {
     //считает результат по большей цене из стакана чем цена первого ордера в стакане. Зависит от объема
     public static double getAmountBuyCoinFromPair(Pair pair, Coin coinSell, Orderbook ob, double amountSellCoin){
         double resAmount=0.0;
-        double amountSellCoinFromOrderbook=0.0;
+        double amountSellCoinFromOrderbook=0.0;//промежуточное значение объемов, набираемое из стакана торгов
         double price=0.0;
-        String strPrice="";
+        String strPrice;//ask или bid
         int i=0;//инкремент для сумирования объемов из OrderBook
         if (firstCoinOnPair(pair, coinSell)){
             strPrice = "bid";
-            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
-                amountSellCoinFromOrderbook+=ob.bid.get(i).size;
+            while (amountSellCoinFromOrderbook<amountSellCoin | i<ob.bid.size()){
+                // сравнивает что получится после добавления объема рассматриваемой котировки к обему обему
+                // если обему превышает заданное amountSellCoin, то ставит финальным объемом сделки значение amountSellCoin
+                // и price с последней котировки
+                // если же после суммирования size объем все еще меньше, то просто добавляется объем из котировки к финальному объему и начинаем рассматривать следующую котировку
+                amountSellCoinFromOrderbook = amountSellCoinFromOrderbook+=ob.bid.get(i).size<amountSellCoin?amountSellCoinFromOrderbook+=ob.bid.get(i).size:amountSellCoin;
                 price = ob.bid.get(i).price;
                 i++;
             }
-            resAmount=price*amountSellCoin*(1-FEE);
+            resAmount = price==0?0.0:price*amountSellCoin*(1-FEE);//если price 0, то деление на 0.0 выдает результат Infinity
         } else {
             strPrice = "ask";
-            while (amountSellCoinFromOrderbook<amountSellCoin && i<ob.bid.size()){
-                amountSellCoinFromOrderbook+=ob.ask.get(i).size*ob.ask.get(i).price;
+            while (amountSellCoinFromOrderbook<amountSellCoin | i<ob.ask.size()){
+                amountSellCoinFromOrderbook = amountSellCoinFromOrderbook+=ob.ask.get(i).size<amountSellCoin?amountSellCoinFromOrderbook+=ob.ask.get(i).size:amountSellCoin;
                 price = ob.ask.get(i).price;
                 i++;
             }
@@ -464,6 +506,145 @@ public class HitBtc {
         return resAmount;
     }
 
+    public static double getAmountSellCoinFromPair(Pair pair, Coin coinBuy, Orderbook ob, double amountBuyCoin){
+        double resAmount;
+        double amountBuyCoinOrderbook=0.0;
+        double price=0.0;
+        String strPrice;
+        int i=0;
+        if (firstCoinOnPair(pair, coinBuy)){
+            strPrice="ask";
+            while (amountBuyCoinOrderbook<amountBuyCoin | i<ob.ask.size()){
+                amountBuyCoinOrderbook = amountBuyCoinOrderbook+=ob.ask.get(i).size<amountBuyCoin?amountBuyCoinOrderbook+=ob.ask.get(i).size:amountBuyCoin;
+                price=ob.ask.get(i).price;
+                i++;
+            }
+            resAmount = price==0.0?0.0:price*amountBuyCoin*(1+FEE);
+        } else {
+            strPrice="bid";
+            while (amountBuyCoinOrderbook<amountBuyCoin | i<ob.bid.size()){
+                amountBuyCoinOrderbook = amountBuyCoinOrderbook+=ob.bid.get(i).size<amountBuyCoin?amountBuyCoinOrderbook+=ob.bid.get(i).size:amountBuyCoin;
+                price=ob.bid.get(i).price;
+                i++;
+            }
+            resAmount = price==0.0?0.0:amountBuyCoin/price*(1+FEE);
+        }
+        System.out.printf("|getAmountSellCoinFromPair| pair:%s, coinBuy:%s, amountBuyCoin:%s.\t amountBuyCoinFromOrderbook:%s, strPrice:%s, price:%s, resAmount:%s\n", pair.exForm, coinBuy.abbreviation, amountBuyCoin, amountBuyCoinOrderbook, strPrice, price, resAmount);
+        return resAmount;
+    }
+
+    //findcoin=Coin1 - монета объемы котоой указаны в Orderbook явно.
+    //findCoin=Coin2 - монета к которой торгуется coin1. Надо переводить объем в coin1  и сравнивать
+    private static double getPriceFromOrderbook(Orderbook ob, Coin coin1, Coin coin2, Coin findCoin, double amount, String askOrBid){
+        double price = 0.0;
+        int size = askOrBid=="ask"?ob.ask.size():ob.bid.size();
+        if (findCoin==coin1){
+            double tempAmountFromOB=0.0;
+            for (int i=0; i<size; i++){
+                if (askOrBid=="ask"){
+                    tempAmountFromOB = tempAmountFromOB+ob.ask.get(i).size<amount?tempAmountFromOB+ob.ask.get(i).size:amount;
+                } else {
+                    tempAmountFromOB = tempAmountFromOB+ob.bid.get(i).size<amount?tempAmountFromOB+ob.bid.get(i).size:amount;
+                }
+                if (tempAmountFromOB>=amount){
+                    price = askOrBid=="ask"?ob.ask.get(i).price:ob.bid.get(i).price;
+                    break;
+                }
+            }
+        } else{
+            double tempAmountFromOB=0.0;
+            for(int i=0; i<size; i++){
+                // объем монеты к которой торгуется(quote) на конкретно котировке
+                double partAmount = askOrBid=="ask"?ob.ask.get(i).price*ob.ask.get(i).size:ob.bid.get(i).price*ob.bid.get(i).size;
+                tempAmountFromOB = tempAmountFromOB+partAmount<amount?tempAmountFromOB+partAmount:amount;
+                if (tempAmountFromOB>=amount){
+                    price = askOrBid=="ask"?ob.ask.get(i).price:ob.bid.get(i).price;
+                }
+            }
+        }
+        return price;
+    }
+
+    private static double getSummAmountFromOrderbook(Orderbook ob, Coin coin1, Coin coin2, Coin findCoin, double price, String askOrBid){
+        double resAmount=0.0;
+        int size = askOrBid=="ask"?ob.ask.size():ob.bid.size();
+        if (findCoin==coin1){
+            for (int i=0; i<size; i++){
+                if (askOrBid=="ask"){
+                    if (ob.ask.get(i).price<=price){
+                        resAmount+=ob.ask.get(i).size;
+                    } else {break;}
+                } else{
+                    if (ob.bid.get(i).price<=price){
+                        resAmount+=ob.bid.get(i).size;
+                    } else {break;}
+                }
+            }
+        } else {
+            for (int i=0; i>size; i++){
+                if (askOrBid=="ask"){
+                    double partAmount = ob.ask.get(i).price*ob.ask.get(i).size;
+                    if (ob.ask.get(i).price<=price){
+                        resAmount+=partAmount;
+                    } else {break;}
+                } else {
+                    double partAmount = ob.bid.get(i).price*ob.bid.get(i).size;
+                    if (ob.bid.get(i).price<=price){
+                        resAmount+=partAmount;
+                    } else {break;}
+                }
+            }
+        }
+        return resAmount;
+    }
+
+    // определяет первые объемы и цены для просчета профита
+    private static double getFirstVolume(Orderbook obTrans1th, Orderbook obTrans2th, Orderbook obTrans3th){
+        double res = obTrans1th.ask.get(0).size<obTrans2th.bid.get(0).size?obTrans1th.ask.get(0).size:obTrans2th.bid.get(0).size;
+        double volQuoteCoin1thTrans = res*obTrans1th.ask.get(0).price;
+        double volBaseCoin3thTrans = obTrans3th.ask.get(0).size;// то же самое что и QuoteCoin1thTrans
+        if (volQuoteCoin1thTrans>volBaseCoin3thTrans){
+            res=volBaseCoin3thTrans/obTrans1th.ask.get(0).price;
+        }
+        return res;
+    }
+
+    // на вход получает котировки по все 2м парам, а также объем базовой монеты с первой сделки, которая показала "+".
+    // находит узкое горлышко в котировках и добавляет на максимальное значение, пока не достигнет следующего bottlneck котировок.
+    private static double getNextBaseVolume(Pair pairTrans1th, Pair pairTrans2th, Pair pairTrans3th, Coin coinBase, Coin coinQuote1, Coin coinQuote2,
+                                            Orderbook obTrans1th, Orderbook obTrans2th, Orderbook obTrans3th, double amountBaseCoin){
+        double volBaseCoinTrans1=amountBaseCoin;
+        double volQuoteCoin1Trnas1=getAmountSellCoinFromPair(pairTrans1th, coinBase, obTrans1th, volBaseCoinTrans1);
+        double volBaseCoinTrans2=volBaseCoinTrans1;
+        double volQuoteCoin2Trans2=getAmountBuyCoinFromPair(pairTrans2th, coinBase, obTrans2th, volBaseCoinTrans2);
+        double volQuoteCoin2Trans3=volQuoteCoin2Trans2;
+        double volQuoteCoin1Trans3=getAmountBuyCoinFromPair(pairTrans3th, coinQuote2, obTrans3th, volQuoteCoin2Trans3);
+
+        // разница в объеме монет между значениеми просчитаными ранее, при которых есть профит и остаточным объемом в стакане котировок при той же самой цене.
+        double deltaBaseCoinTrans1 = getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,getPriceFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,volBaseCoinTrans1,"ask"),"ask") - volBaseCoinTrans1;
+        // может имеет смысл перевести по курсу deltaBaseCoinTrans1 = getSummAmountFromOrderbook и отнять уже объем volQuoteCoin1Trnas1 от полученного значения????
+        double deltaQuoteCoin1Trans1 = getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask"),"ask") - volQuoteCoin1Trnas1;
+        double deltaBaseCoinTrans2 = getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinBase, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinBase, volBaseCoinTrans2, "bid"),"bid") - volBaseCoinTrans2;
+        double deltaQuoteCoin2Trans2 = getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinQuote2, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinQuote2, volQuoteCoin2Trans2, "bid"), "bid") - volQuoteCoin2Trans2;
+        double deltaQuoteCoin2Trans3 = getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2,
+                getPriceFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2, volQuoteCoin2Trans3,
+                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask") - volQuoteCoin2Trans3;
+        //дичь. Как это проверить, если пара не стандартная, типа USDTBTC я хз.
+        double deltaQuoteCoin1Trans3 = getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote1,
+                getPriceFromOrderbook(obTrans3th,  pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote1, volQuoteCoin1Trans3,
+                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask") - volQuoteCoin1Trans3;
+        System.out.println("|getNextBaseVolume|");
+        System.out.println("volBaseCoinTrans1:"+volBaseCoinTrans1+"\tdeltaBaseCoinTrans1:"+deltaBaseCoinTrans1);
+        System.out.println("volQuoteCoin1Trnas1"+volQuoteCoin1Trnas1+"\tdeltaQuoteCoin1Trans1"+deltaQuoteCoin1Trans1);
+        System.out.println("volBaseCoinTrans2"+volBaseCoinTrans2+"\tdeltaBaseCoinTrans2"+deltaBaseCoinTrans2);
+        System.out.println("volQuoteCoin2Trans2"+volQuoteCoin2Trans2+"\tdeltaQuoteCoin2Trans2"+deltaQuoteCoin2Trans2);
+        System.out.println("volQuoteCoin2Trans3"+volQuoteCoin2Trans3+"\tdeltaQuoteCoin2Trans3"+deltaQuoteCoin2Trans3);
+        System.out.println("volQuoteCoin1Trans3"+volQuoteCoin1Trans3+"\tdeltaQuoteCoin1Trans3"+deltaQuoteCoin1Trans3);
+        return 0.0;
+
+    }
+
+    // возвращает true если coin в паре стоит первым, т.е. является базовым, который торгуется к чему-то крупному типа BTC, ETH....
     public static boolean firstCoinOnPair(Pair pair, Coin coin){
         if (pair.baseCoin==coin.id){
             return true;
