@@ -621,27 +621,26 @@ public class HitBtc {
         double volQuoteCoin1Trans3=getAmountBuyCoinFromPair(pairTrans3th, coinQuote2, obTrans3th, volQuoteCoin2Trans3);
 
         // разница в объеме монет между значениеми просчитаными ранее, при которых есть профит и остаточным объемом в стакане котировок при той же самой цене.
-        double deltaBaseCoinTrans1 = getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,getPriceFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,volBaseCoinTrans1,"ask"),"ask") - volBaseCoinTrans1;
+        double deltaBaseCoinTrans1 = volBaseCoinTrans1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,getPriceFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,volBaseCoinTrans1,"ask"),"ask");
         // может имеет смысл перевести по курсу deltaBaseCoinTrans1 = getSummAmountFromOrderbook и отнять уже объем volQuoteCoin1Trnas1 от полученного значения????
-        double deltaQuoteCoin1Trans1 = getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask"),"ask") - volQuoteCoin1Trnas1;
-        double deltaBaseCoinTrans2 = getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinBase, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinBase, volBaseCoinTrans2, "bid"),"bid") - volBaseCoinTrans2;
-        double deltaQuoteCoin2Trans2 = getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinQuote2, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinQuote2, volQuoteCoin2Trans2, "bid"), "bid") - volQuoteCoin2Trans2;
-        double deltaQuoteCoin2Trans3 = getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2,
+        double deltaQuoteCoin1Trans1 = volQuoteCoin1Trnas1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask"),"ask");
+        double deltaBaseCoinTrans2 = volBaseCoinTrans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinBase, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinBase, volBaseCoinTrans2, "bid"),"bid");
+        double deltaQuoteCoin2Trans2 = volQuoteCoin2Trans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinQuote2, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinQuote2, volQuoteCoin2Trans2, "bid"), "bid");
+        double deltaQuoteCoin2Trans3 = volQuoteCoin2Trans3 - getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2,
                 getPriceFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2, volQuoteCoin2Trans3,
-                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask") - volQuoteCoin2Trans3;
+                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask");
         //дичь. Как это проверить, если пара не стандартная, типа USDTBTC я хз.
-        double deltaQuoteCoin1Trans3 = getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote1,
+        double deltaQuoteCoin1Trans3 = volQuoteCoin1Trans3 - getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote1,
                 getPriceFromOrderbook(obTrans3th,  pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote1, volQuoteCoin1Trans3,
-                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask") - volQuoteCoin1Trans3;
+                        pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask");
         System.out.println("|getNextBaseVolume|");
-        System.out.println("volBaseCoinTrans1:"+volBaseCoinTrans1+"\tdeltaBaseCoinTrans1:"+deltaBaseCoinTrans1);
-        System.out.println("volQuoteCoin1Trnas1"+volQuoteCoin1Trnas1+"\tdeltaQuoteCoin1Trans1"+deltaQuoteCoin1Trans1);
-        System.out.println("volBaseCoinTrans2"+volBaseCoinTrans2+"\tdeltaBaseCoinTrans2"+deltaBaseCoinTrans2);
-        System.out.println("volQuoteCoin2Trans2"+volQuoteCoin2Trans2+"\tdeltaQuoteCoin2Trans2"+deltaQuoteCoin2Trans2);
-        System.out.println("volQuoteCoin2Trans3"+volQuoteCoin2Trans3+"\tdeltaQuoteCoin2Trans3"+deltaQuoteCoin2Trans3);
-        System.out.println("volQuoteCoin1Trans3"+volQuoteCoin1Trans3+"\tdeltaQuoteCoin1Trans3"+deltaQuoteCoin1Trans3);
+        System.out.println("volBaseCoinTrans1: "+volBaseCoinTrans1+"\tdeltaBaseCoinTrans1: "+deltaBaseCoinTrans1);
+        System.out.println("volQuoteCoin1Trnas1: "+volQuoteCoin1Trnas1+"\tdeltaQuoteCoin1Trans1: "+deltaQuoteCoin1Trans1);
+        System.out.println("volBaseCoinTrans2: "+volBaseCoinTrans2+"\tdeltaBaseCoinTrans2: "+deltaBaseCoinTrans2);
+        System.out.println("volQuoteCoin2Trans2: "+volQuoteCoin2Trans2+"\tdeltaQuoteCoin2Trans2: "+deltaQuoteCoin2Trans2);
+        System.out.println("volQuoteCoin2Trans3: "+volQuoteCoin2Trans3+"\tdeltaQuoteCoin2Trans3: "+deltaQuoteCoin2Trans3);
+        System.out.println("volQuoteCoin1Trans3: "+volQuoteCoin1Trans3+"\tdeltaQuoteCoin1Trans3: "+deltaQuoteCoin1Trans3);
         return 0.0;
-
     }
 
     // возвращает true если coin в паре стоит первым, т.е. является базовым, который торгуется к чему-то крупному типа BTC, ETH....
