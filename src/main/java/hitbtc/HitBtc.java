@@ -614,7 +614,7 @@ public class HitBtc {
     private static double getNextBaseVolume(Pair pairTrans1th, Pair pairTrans2th, Pair pairTrans3th, Coin coinBase, Coin coinQuote1, Coin coinQuote2,
                                             Orderbook obTrans1th, Orderbook obTrans2th, Orderbook obTrans3th, double amountBaseCoin){
         double volBaseCoinTrans1=amountBaseCoin;
-        double volQuoteCoin1Trnas1=getAmountSellCoinFromPair(pairTrans1th, coinBase, obTrans1th, volBaseCoinTrans1);
+        double volQuoteCoin1Trans1=getAmountSellCoinFromPair(pairTrans1th, coinBase, obTrans1th, volBaseCoinTrans1);
         double volBaseCoinTrans2=volBaseCoinTrans1;
         double volQuoteCoin2Trans2=getAmountBuyCoinFromPair(pairTrans2th, coinBase, obTrans2th, volBaseCoinTrans2);
         double volQuoteCoin2Trans3=volQuoteCoin2Trans2;
@@ -623,10 +623,10 @@ public class HitBtc {
         // разница в объеме монет между значениеми просчитаными ранее, при которых есть профит и остаточным объемом в стакане котировок при той же самой цене.
         double deltaBaseCoinTrans1 = volBaseCoinTrans1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,getPriceFromOrderbook(obTrans1th,coinBase,coinQuote1,coinBase,volBaseCoinTrans1,"ask"),"ask");
         // может имеет смысл перевести по курсу deltaBaseCoinTrans1 = getSummAmountFromOrderbook и отнять уже объем volQuoteCoin1Trnas1 от полученного значения????
-        double getPriceFromOBCoinQ1Tr1=getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask");
+        double getPriceFromOBCoinQ1Tr1=getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trans1,"ask");
         double getSummAmountFromOBCoinQ1Tr1= getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOBCoinQ1Tr1,"ask");
         System.out.println("getPriceFromOBCoinQ1Tr1: "+getPriceFromOBCoinQ1Tr1+" getSummAmountFromOBCoinQ1Tr1: "+getSummAmountFromOBCoinQ1Tr1);
-        double deltaQuoteCoin1Trans1 = volQuoteCoin1Trnas1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trnas1,"ask"),"ask");
+        double deltaQuoteCoin1Trans1 = volQuoteCoin1Trans1 - getSummAmountFromOrderbook(obTrans1th,coinBase,coinQuote1,coinQuote1,getPriceFromOrderbook(obTrans1th, coinBase,coinQuote1,coinQuote1,volQuoteCoin1Trans1,"ask"),"ask");
         double deltaBaseCoinTrans2 = volBaseCoinTrans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinBase, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinBase, volBaseCoinTrans2, "bid"),"bid");
         double deltaQuoteCoin2Trans2 = volQuoteCoin2Trans2 - getSummAmountFromOrderbook(obTrans2th,coinBase, coinQuote2, coinQuote2, getPriceFromOrderbook(obTrans2th, coinBase, coinQuote2, coinQuote2, volQuoteCoin2Trans2, "bid"), "bid");
         double deltaQuoteCoin2Trans3 = volQuoteCoin2Trans3 - getSummAmountFromOrderbook(obTrans3th, pairTrans3th.baseCoin==coinQuote1.id?coinQuote1:coinQuote2, pairTrans3th.quoteCoin==coinQuote2.id?coinQuote2:coinQuote1, coinQuote2,
@@ -638,7 +638,7 @@ public class HitBtc {
                         pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask"), pairTrans3th.baseCoin==coinQuote1.id?"bid":"ask");
         System.out.println("|getNextBaseVolume|");
         System.out.println("volBaseCoinTrans1: "+volBaseCoinTrans1+"\tdeltaBaseCoinTrans1: "+deltaBaseCoinTrans1);
-        System.out.println("volQuoteCoin1Trnas1: "+volQuoteCoin1Trnas1+"\tdeltaQuoteCoin1Trans1: "+deltaQuoteCoin1Trans1);
+        System.out.println("volQuoteCoin1Trnas1: "+volQuoteCoin1Trans1+"\tdeltaQuoteCoin1Trans1: "+deltaQuoteCoin1Trans1);
         System.out.println("volBaseCoinTrans2: "+volBaseCoinTrans2+"\tdeltaBaseCoinTrans2: "+deltaBaseCoinTrans2);
         System.out.println("volQuoteCoin2Trans2: "+volQuoteCoin2Trans2+"\tdeltaQuoteCoin2Trans2: "+deltaQuoteCoin2Trans2);
         System.out.println("volQuoteCoin2Trans3: "+volQuoteCoin2Trans3+"\tdeltaQuoteCoin2Trans3: "+deltaQuoteCoin2Trans3);
