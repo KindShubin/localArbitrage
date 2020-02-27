@@ -36,6 +36,7 @@ public class WriteDataToDB {
         }
     }
 
+    // в api "symbol" - это пара коинов, например LTCETH с полями baseCurrency, quoteCurrency и т.д. В базе это Pair
     public static void toDBPair(Symbol symbol) throws SQLException, IOException {
         String baseCoin = symbol.baseCurrency;
         String quoteCoin = symbol.quoteCurrency;
@@ -43,24 +44,41 @@ public class WriteDataToDB {
         String selectBaseCoin=new StringBuilder().append("SELECT id FROM exchange.coins where abbreviation=\"").append(baseCoin).append("\"").toString();
         String selectQuoteCoin=new StringBuilder().append("SELECT id FROM exchange.coins where abbreviation=\"").append(quoteCoin).append("\"").toString();
         String selectFeeCoin=new StringBuilder().append("SELECT id FROM exchange.coins where abbreviation=\"").append(feeCoin).append("\"").toString();
-        ArrayList<HashMap> rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
-        ArrayList<HashMap> rsQuoteCoin = DBconnactionVPS.getResultSet(selectQuoteCoin);
-        ArrayList<HashMap> rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
-        if (rsBaseCoin.size()==0){
-            toDBCoin(new Currency(baseCoin));
-            rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
+        int idBaseCoin=0;
+        int idQuoteCoin=0;
+        int idFeeCoin=0;
+        try{
+            ArrayList<HashMap> rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
+            if (rsBaseCoin.size()==0){
+                toDBCoin(new Currency(baseCoin));
+                rsBaseCoin = DBconnactionVPS.getResultSet(selectBaseCoin);
+            }
+            idBaseCoin = GetVal.getInt(rsBaseCoin.get(0),"id");
         }
-        int idBaseCoin = GetVal.getInt(rsBaseCoin.get(0),"id");
-        if (rsQuoteCoin.size()==0) {
-            toDBCoin(new Currency(quoteCoin));
-            rsQuoteCoin = DBconnactionVPS.getResultSet(selectQuoteCoin);
+        catch (Exception e){
+            e.toString();
         }
-        int idQuoteCoin = GetVal.getInt(rsQuoteCoin.get(0),"id");
-        if (rsFeeCoin.size()==0) {
-            toDBCoin(new Currency(feeCoin));
-            rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
+        try{
+            ArrayList<HashMap> rsQuoteCoin = DBconnactionVPS.getResultSet(selectQuoteCoin);
+            if (rsQuoteCoin.size()==0) {
+                toDBCoin(new Currency(quoteCoin));
+                rsQuoteCoin = DBconnactionVPS.getResultSet(selectQuoteCoin);
+            }
+            idQuoteCoin = GetVal.getInt(rsQuoteCoin.get(0),"id");
         }
-        int idFeeCoin = GetVal.getInt(rsFeeCoin.get(0),"id");
+        catch (Exception e){
+            e.toString();
+        }
+        try{
+            ArrayList<HashMap> rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
+            if (rsFeeCoin.size()==0) {
+                toDBCoin(new Currency(feeCoin));
+                rsFeeCoin = DBconnactionVPS.getResultSet(selectFeeCoin);
+            }
+            idFeeCoin = GetVal.getInt(rsFeeCoin.get(0),"id");
+        }catch (Exception e){
+            e.toString();
+        }
         if (idBaseCoin>0 & idQuoteCoin>0 & idFeeCoin>0 & symbol.id!=null){
             String update = new StringBuilder().append("UPDATE exchange.pairs SET baseCoin=").append(idBaseCoin).append(", quoteCoin =").append(idQuoteCoin).append(", feeCoin =")
                     .append(idFeeCoin).append(" WHERE exForm=\"").append(symbol.id).append("\"").toString();
@@ -87,7 +105,7 @@ public class WriteDataToDB {
     }
 
     public static void toDBHitbtc(TickerSymbol tickerSymbol) throws SQLException, IOException {
-        String strPair = tickerSymbol.symbol;
+        String strPair = tickerSymbol.symbol;//"ETHUSD"...
         String selectIdPair = new StringBuilder().append("SELECT id FROM exchange.pairs where exForm=\"").append(strPair).append("\"").toString();
         ArrayList<HashMap> rsIdPair = DBconnactionVPS.getResultSet(selectIdPair);
         if (rsIdPair.size()<1){
@@ -96,8 +114,8 @@ public class WriteDataToDB {
         }
         if (rsIdPair.size()>0){
             int idPair = GetVal.getInt(rsIdPair.get(0),"id");
-            double bid1=tickerSymbol.bid>0?tickerSymbol.bid:0.0;
-            double ask1=tickerSymbol.ask>0?tickerSymbol.ask:0.0;
+            double bid1=tickerSymbol.bid>0?tickerSymbol.bid:0.0;// на случай если стакан заявок пуст
+            double ask1=tickerSymbol.ask>0?tickerSymbol.ask:0.0;// на случай если стакан заявок пуст
             String update = new StringBuilder().append("UPDATE exchange.hitbtc SET ask1=").append(ask1).append(", bid1=").append(bid1)
                     .append(", date=now() where pair=").append(idPair).toString();
             String insert = new StringBuilder().append("INSERT INTO exchange.hitbtc (pair, bid1, ask1, date) VALUES (").append(idPair).append(", ").append(bid1)
@@ -111,7 +129,7 @@ public class WriteDataToDB {
                 }
             } else {
                 //System.out.println("|WriteDataToDB.toDBHitbtc| update:"+update);
-                //System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
+                System.out.printf("|WriteDataToDB.toDBHitbtc| %s Update Done\n", strPair);
             }
         } else { System.out.printf("|WriteDataToDB.toDBHitbtc| %s update and insert didn't start\n", strPair);}
     }

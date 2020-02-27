@@ -20,10 +20,11 @@ import hitbtc.InfoDB.Coins.Coins;
 import hitbtc.InfoDB.Hitbtc.Hitbtc;
 import hitbtc.InfoDB.Pairs.Pair;
 import hitbtc.InfoDB.Pairs.Pairs;
+import hitbtc.InfoDB.WriteDataToDB;
 
 public class HitBtc {
 
-    public static final double FEE = 0.0007;
+    public static final double FEE = 0.0007;//0.07% от сделки
 
     //временно для просчета
     public static final Map<Integer, Double> VALUE = new HashMap<Integer, Double>();
@@ -75,7 +76,7 @@ public class HitBtc {
             System.out.println(time2);
             Coins coinsdb = new Coins();
             Pairs pairsdb = new Pairs();
-            Hitbtc hitbtcdb = new Hitbtc();
+            //Hitbtc hitbtcdb = new Hitbtc();
             String time3= new StringBuilder().append("time:").append(new SimpleDateFormat("hh:mm:ss.SSSS").format(new Date())).append("\tafter make objects Coins Pairs Hitbtc\n").toString();
             times=times+time3;
             System.out.println(time3);
@@ -103,9 +104,13 @@ public class HitBtc {
                                     strPair1FromTickerApi = ticker.tickers.get(pairsdb.getExForm(idPair1thTransaction)).symbol;
                                 }catch (Exception e){
                                     //если в Tickers нет нуджного совпадения по паре вида BTCETH, пробую искать совпадение ETHBTC
+                                    System.out.printf("|MAIN| strPair1FromTickerApi fail. ticker.tickers.get(pairsdb.getExForm(%s)).symbol not find\n" , idPair1thTransaction);
+                                    e.toString();
                                     try {
                                         strPair1FromTickerApi = ticker.tickers.get(coinsdb.coins.get(pairsdb.pairs.get(idPair1thTransaction).feeCoin).abbreviation.toString() + coinsdb.coins.get(pairsdb.pairs.get(idPair1thTransaction).baseCoin).abbreviation.toString()).symbol;
-                                    } catch (Exception e1){e1.toString();}
+                                    } catch (Exception e1){
+                                        e1.toString();
+                                    }
                                 }
                                 try{
                                     strPair2FromTickerApi = ticker.tickers.get(pairsdb.getExForm(idPair2thTransaction)).symbol;
@@ -124,12 +129,12 @@ public class HitBtc {
                                     } catch (Exception e1){e1.toString();}
                                 }
                                 ///////////////////////////////
-                                System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s:%s\t2)%s:%s:%s\t3)%s:%s:%s",
+                                System.out.printf("Base coin:%s-%s\tQuoteCoin1:%s-%s\tQuoteCoin2:%s-%s\t1)%s:%s:%s\t2)%s:%s:%s\t3)%s:%s:%s\n",
                                         baseAltCoin, coinsdb.getAbbr(baseAltCoin), quoteCoin1thTransaction, coinsdb.getAbbr(quoteCoin1thTransaction),
                                         quoteCoin2thTransaction, coinsdb.getAbbr(quoteCoin2thTransaction),
-                                        idPair1thTransaction, pairsdb.getExForm(idPair1thTransaction), strPair1FromTickerApi.equals(pairsdb.getExForm(idPair1thTransaction))?strPair1FromTickerApi:strPair1FromTickerApi+"!!!!!!!!!!!!!!!!!!!!!",
-                                        idPair2thTransaction, pairsdb.getExForm(idPair2thTransaction), strPair2FromTickerApi.equals(pairsdb.getExForm(idPair2thTransaction))?strPair2FromTickerApi:strPair2FromTickerApi+"!!!!!!!!!!!!!!!!!!!!!",
-                                        idPair3thTransaction, pairsdb.getExForm(idPair3thTransaction), strPair3FromTickerApi.equals(pairsdb.getExForm(idPair3thTransaction))?strPair3FromTickerApi:strPair3FromTickerApi+"!!!!!!!!!!!!!!!!!!!!!");
+                                        idPair1thTransaction, pairsdb.getExForm(idPair1thTransaction), strPair1FromTickerApi.equals(pairsdb.getExForm(idPair1thTransaction))?strPair1FromTickerApi:strPair1FromTickerApi+"-",
+                                        idPair2thTransaction, pairsdb.getExForm(idPair2thTransaction), strPair2FromTickerApi.equals(pairsdb.getExForm(idPair2thTransaction))?strPair2FromTickerApi:strPair2FromTickerApi+"-",
+                                        idPair3thTransaction, pairsdb.getExForm(idPair3thTransaction), strPair3FromTickerApi.equals(pairsdb.getExForm(idPair3thTransaction))?strPair3FromTickerApi:strPair3FromTickerApi+"-");
                                 //////////////////
                                 boolean check = true;
                                 double volumebaseCoin=0.0;
@@ -358,7 +363,7 @@ public class HitBtc {
         int pair = pairs.getIntPair(coinBuy, coinSell);
         if (pair == 0) {return 0.0;}
         String strPair=pairs.pairs.get(pair).exForm;
-        //System.out.printf("Pair:%s, strPair%s\n", pair, strPair);
+        System.out.printf("Pair:%s, strPair%s\n", pair, strPair);
         double price = 0.0;
         String strPrice="";//потом убрать
         double res = 0.0;
@@ -366,7 +371,7 @@ public class HitBtc {
             try{
                 price=ticker.tickers.get(strPair).ask;
             } catch (Exception e){
-                System.out.printf("|makeTransactionAPI| Error find price ask for pair%s\n",strPair);
+                System.out.printf("|makeTransactionAPI| Error find price ask for pair %s\n",strPair);
                 e.toString();
                 return  res;
             }
